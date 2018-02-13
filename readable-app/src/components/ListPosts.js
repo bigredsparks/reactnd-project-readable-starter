@@ -17,9 +17,9 @@ class ListPosts extends Component {
           Categories
           <div className="category-list">
             <ul>
-              <li><Link to='/category'>React</Link></li>
-              <li><Link to='/category'>Redux</Link></li>
-              <li><Link to='/category'>React</Link></li>
+              <li><Link to='/react'>React</Link></li>
+              <li><Link to='/redux'>Redux</Link></li>
+              <li><Link to='/udacity'>Udacity</Link></li>
             </ul>
           </div>
         </div>

@@ -14,7 +14,7 @@ class App extends Component {
         title: 'Title 1',
         body: 'Body 1',
         author: 'Author Name',
-        category: 'React',
+        category: 'react',
         voteScore: 1,
         deleted: false
       },
@@ -24,7 +24,7 @@ class App extends Component {
         title: 'Title 2',
         body: 'Body 2',
         author: 'Author Name',
-        category: 'Redux',
+        category: 'redux',
         voteScore: 1,
         deleted: false
       },
@@ -34,7 +34,7 @@ class App extends Component {
         title: 'Title 3',
         body: 'Body 3',
         author: 'Author Name',
-        category: 'Udacity',
+        category: 'udacity',
         voteScore: 1,
         deleted: false
       },
@@ -50,16 +50,20 @@ class App extends Component {
           <ListPosts posts={posts}
           />
         )}/>
-        <Route path='/category' render={({history}) =>(
-          <PostCategory
-          />
-        )}/>
-        <Route path='/detail' render={({history}) =>(
-          <PostDetail
-          />
-        )}/>
         <Route path='/edit' render={({history}) =>(
           <PostEdit
+          />
+        )}/>
+        <Route exact path='/:category' render={({history, match}) =>(
+          <PostCategory
+            category={match.params.category}
+            posts={posts}
+          />
+        )}/>
+        <Route exact path='/:category/:post_id' render={({history, match}) =>(
+          <PostDetail
+            category={match.params.category}
+            postId={match.params.post_id}
           />
         )}/>
       </div>
