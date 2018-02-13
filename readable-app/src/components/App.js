@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Route } from 'react-router-dom'
+import ListPosts from './ListPosts'
 import PostCategory from './PostCategory'
 import PostDetail from './PostDetail'
 import PostEdit from './PostEdit'
@@ -9,9 +10,8 @@ class App extends Component {
     return (
       <div className="App">
         <Route exact path='/' render={() =>(
-          <div>
-            Readable main
-          </div>
+          <ListPosts
+          />
         )}/>
         <Route path='/category' render={({history}) =>(
           <PostCategory
