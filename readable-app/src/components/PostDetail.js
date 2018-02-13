@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class PostDetail extends Component {
   render() {
     return (
       <div className="PostDetail">
-        Post Detail
+        <Link to='/'>Home</Link>
+        <div>Post Detail</div>
       </div>
     );
   }

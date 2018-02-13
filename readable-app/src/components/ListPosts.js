@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 import moment from 'moment'
 
 class ListPosts extends Component {
@@ -16,9 +17,9 @@ class ListPosts extends Component {
           Categories
           <div className="category-list">
             <ul>
-              <li>React</li>
-              <li>Redux</li>
-              <li>Udacity</li>
+              <li><Link to='/category'>React</Link></li>
+              <li><Link to='/category'>Redux</Link></li>
+              <li><Link to='/category'>React</Link></li>
             </ul>
           </div>
         </div>
@@ -30,6 +31,7 @@ class ListPosts extends Component {
               <li key={post.id}>
                 <div>
                   {this.timestampToStr(post.timestamp)}: category:{post.category} author:{post.author} - {post.title} - {post.body}
+                  <Link to='/detail'>View</Link>
                 </div>
               </li>
             ))}

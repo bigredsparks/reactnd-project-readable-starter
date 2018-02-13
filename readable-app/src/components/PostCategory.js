@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class PostCategory extends Component {
   render() {
     return (
       <div className="PostCategory">
-        Post Category
+        <Link to='/'>Home</Link>
+        <div>Post Category</div>
       </div>
     );
   }
