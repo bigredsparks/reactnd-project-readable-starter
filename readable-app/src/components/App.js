@@ -7,6 +7,11 @@ import PostEdit from './PostEdit'
 
 class App extends Component {
   state = {
+    categories: [
+      'react',
+      'redux',
+      'udacity'
+    ],
     posts: [
       {
         id: '1',
@@ -42,7 +47,10 @@ class App extends Component {
   }
 
   render() {
-    const { posts } = this.state
+    const { posts, categories } = this.state
+
+    const categoryPath = `/:category(${categories.join('|')})`
+    const detailPath = categoryPath + '/:post_id'
 
     return (
       <div className="App">
@@ -54,13 +62,13 @@ class App extends Component {
           <PostEdit
           />
         )}/>
-        <Route exact path='/:category' render={({history, match}) =>(
+        <Route exact path={categoryPath} render={({history, match}) =>(
           <PostCategory
             category={match.params.category}
             posts={posts}
           />
         )}/>
-        <Route exact path='/:category/:post_id' render={({history, match}) =>(
+        <Route exact path={detailPath} render={({history, match}) =>(
           <PostDetail
             category={match.params.category}
             postId={match.params.post_id}
