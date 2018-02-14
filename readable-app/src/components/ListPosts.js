@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { timestampToStr } from '../utils/dateUtils'
+import { capitalize } from '../utils/stringUtils'
 
 class ListPosts extends Component {
   render() {
-    const { posts } = this.props
+    const { posts, categories } = this.props
 
     return (
       <div className="ListPosts">
@@ -12,9 +13,9 @@ class ListPosts extends Component {
           Categories
           <div className="category-list">
             <ul>
-              <li><Link to='/react'>React</Link></li>
-              <li><Link to='/redux'>Redux</Link></li>
-              <li><Link to='/udacity'>Udacity</Link></li>
+              {categories.map((category) =>(
+                <li><Link to={`/${category}`}>{capitalize(category)}</Link></li>
+              ))}
             </ul>
           </div>
         </div>
