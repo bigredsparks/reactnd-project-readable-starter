@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom'
 import ListPosts from './ListPosts'
 import PostCategory from './PostCategory'
 import PostDetail from './PostDetail'
-import PostEdit from './PostEdit'
 
 class App extends Component {
   state = {
@@ -55,11 +54,9 @@ class App extends Component {
     return (
       <div className="App">
         <Route exact path='/' render={() =>(
-          <ListPosts posts={posts}
-          />
-        )}/>
-        <Route path='/edit' render={({history}) =>(
-          <PostEdit
+          <ListPosts
+            posts={posts}
+            categories={categories}
           />
         )}/>
         <Route exact path={categoryPath} render={({history, match}) =>(
