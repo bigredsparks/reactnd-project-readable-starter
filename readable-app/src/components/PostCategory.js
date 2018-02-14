@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { timestampToStr } from '../utils/dateUtils'
+import { capitalize } from '../utils/stringUtils'
 
 class PostCategory extends Component {
   render() {
@@ -12,7 +13,7 @@ class PostCategory extends Component {
     return (
       <div className="PostCategory">
         <Link to='/'>Home</Link>
-        <div>Post Category: {category} </div>
+        <div>Post Category: {capitalize(category)} </div>
         <div className="posts">
           Posts
           <div className="post-list">
