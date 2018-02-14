@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import moment from 'moment'
+import { timestampToStr } from '../utils/dateUtils'
 
 class PostCategory extends Component {
-
-  timestampToStr = (timestamp) => {
-    return moment(timestamp).format("MM/DD/YYYY h:mm:ss a")
-  }
-
   render() {
     const { posts, category } = this.props
     console.log(this.props)
@@ -25,8 +20,8 @@ class PostCategory extends Component {
             {shownPosts.map((post) => (
               <li key={post.id}>
                 <div>
-                  {this.timestampToStr(post.timestamp)}: category:{post.category} author:{post.author} - {post.title} - {post.body}
-                  <Link to='/detail'>View</Link>
+                  {timestampToStr(post.timestamp)}: category:{post.category} author:{post.author} - {post.title} - {post.body}
+                  <Link to={`/${post.category}/${post.id}`}>View</Link>
                 </div>
               </li>
             ))}
