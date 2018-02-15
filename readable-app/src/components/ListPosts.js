@@ -4,8 +4,9 @@ import { Grid, Row, Col, Table, PageHeader } from 'react-bootstrap'
 import { timestampToStr } from '../utils/dateUtils'
 import { capitalize } from '../utils/stringUtils'
 
-import AngleUp from 'react-icons/lib/fa/angle-up'
-import AngleDown from 'react-icons/lib/fa/angle-down'
+import SortedUp from 'react-icons/lib/ti/arrow-sorted-up'
+import SortedDown from 'react-icons/lib/ti/arrow-sorted-down'
+import Unsorted from 'react-icons/lib/ti/arrow-unsorted'
 import sortBy from 'sort-by'
 
 class ListPosts extends Component {
@@ -44,6 +45,7 @@ class ListPosts extends Component {
               <h2>Categories</h2>
               <div className="category-list">
                 <ul>
+                <li><Link to={'/'}>All</Link></li>
                   {categories.map((category) =>(
                     <li><Link to={`/${category}`}>{capitalize(category)}</Link></li>
                   ))}
@@ -64,9 +66,9 @@ class ListPosts extends Component {
                           {
                             sortColumn === 'timestamp'
                             ? sortOrder === ''
-                              ? <AngleUp size={30} />
-                              : <AngleDown size={30} />
-                            : ''
+                              ? <SortedUp size={30} />
+                              : <SortedDown size={30} />
+                            : <Unsorted size={30} />
                           }
                           </h4>
                         </th>
@@ -76,9 +78,9 @@ class ListPosts extends Component {
                             {
                               sortColumn === 'category'
                               ? sortOrder === ''
-                                ? <AngleUp size={30} />
-                                : <AngleDown size={30} />
-                              : ''
+                                ? <SortedUp size={30} />
+                                : <SortedDown size={30} />
+                              : <Unsorted size={30} />
                             }
                           </h4>
                         </th>
