@@ -4,6 +4,10 @@ import ListPosts from './ListPosts'
 import PostCategory from './PostCategory'
 import PostDetail from './PostDetail'
 
+//import 'bootstrap/dist/css/bootstrap.css'
+//import 'bootstrap/dist/css/bootstrap-theme.css'
+//import 'startbootstrap-freelancer/css/freelancer.css'
+
 class App extends Component {
   state = {
     categories: [
@@ -14,7 +18,7 @@ class App extends Component {
     posts: [
       {
         id: '1',
-        timestamp: Date.now(),
+        timestamp: 1518727586111,
         title: 'Title 1',
         body: 'Body 1',
         author: 'Author Name',
@@ -24,7 +28,7 @@ class App extends Component {
       },
       {
         id: '2',
-        timestamp: Date.now(),
+        timestamp: 1518727603372,
         title: 'Title 2',
         body: 'Body 2',
         author: 'Author Name',
@@ -34,7 +38,7 @@ class App extends Component {
       },
       {
         id: '3',
-        timestamp: Date.now(),
+        timestamp: 1518727613372,
         title: 'Title 3',
         body: 'Body 3',
         author: 'Author Name',
