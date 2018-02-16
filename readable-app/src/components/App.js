@@ -64,8 +64,9 @@ class App extends Component {
           />
         )}/>
         <Route exact path={categoryPath} render={({history, match}) =>(
-          <PostCategory
+          <ListPosts
             category={match.params.category}
+            categories={categories}
             posts={posts}
           />
         )}/>

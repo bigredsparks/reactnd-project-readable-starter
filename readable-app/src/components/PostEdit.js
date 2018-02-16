@@ -6,8 +6,8 @@ class PostEdit extends Component {
       <div className="PostEdit">
         Post Edit
       </div>
-    );
+    )
   }
 }
 
-export default PostEdit;
+export default PostEdit

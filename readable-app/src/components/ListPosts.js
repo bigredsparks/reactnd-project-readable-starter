@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom'
 import { Grid, Row, Col, Table, PageHeader } from 'react-bootstrap'
 import { timestampToStr } from '../utils/dateUtils'
 import { capitalize } from '../utils/stringUtils'
-
-import SortedUp from 'react-icons/lib/ti/arrow-sorted-up'
-import SortedDown from 'react-icons/lib/ti/arrow-sorted-down'
-import Unsorted from 'react-icons/lib/ti/arrow-unsorted'
+import SortHeader from './SortHeader'
+import SelectCategory from './SelectCategory'
 import sortBy from 'sort-by'
 
 class ListPosts extends Component {
@@ -16,7 +14,7 @@ class ListPosts extends Component {
   }
 
   sortBy = (column) => {
-    console.log("event:", column)
+    // only one column can be sorted at any one time
     this.setState((state) => ({
       sortColumn: column,
       sortOrder: state.sortOrder === '' ? '-' : ''
@@ -24,14 +22,14 @@ class ListPosts extends Component {
   }
 
   render() {
-    const { posts, categories } = this.props
+    const { posts, categories, category } = this.props
     const { sortColumn, sortOrder } = this.state
     let shownPosts = posts
 
+    category && (shownPosts = shownPosts.filter((post) => post.category === category))
+
 //    shownPosts.forEach((p) => (console.log(p.timestamp)))
     shownPosts.sort(sortBy(sortOrder + sortColumn))
-//    shownPosts.forEach((p) => (console.log(p.timestamp)))
-
     console.log("sortColumn", sortColumn)
 
     return (
@@ -41,17 +39,9 @@ class ListPosts extends Component {
         </Row>
         <Row className='show-grid'>
           <Col md={2} >
-            <div className="categories">
-              <h2>Categories</h2>
-              <div className="category-list">
-                <ul>
-                <li><Link to={'/'}>All</Link></li>
-                  {categories.map((category) =>(
-                    <li><Link to={`/${category}`}>{capitalize(category)}</Link></li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <SelectCategory
+              categories={categories}
+            />
           </Col>
           <Col md={10}>
             <div className="ListPosts">
@@ -62,34 +52,27 @@ class ListPosts extends Component {
                     <thead>
                       <tr>
                         <th onClick={() => this.sortBy('timestamp')}>
-                          <h4>Date
-                          {
-                            sortColumn === 'timestamp'
-                            ? sortOrder === ''
-                              ? <SortedUp size={30} />
-                              : <SortedDown size={30} />
-                            : <Unsorted size={30} />
-                          }
-                          </h4>
+                          <SortHeader
+                            display='Date'
+                            column='timestamp'
+                            sortColumn={sortColumn}
+                            sortOrder={sortOrder}
+                          />
                         </th>
                         <th onClick={() => this.sortBy('category')}>
-                          <h4>
-                            Category
-                            {
-                              sortColumn === 'category'
-                              ? sortOrder === ''
-                                ? <SortedUp size={30} />
-                                : <SortedDown size={30} />
-                              : <Unsorted size={30} />
-                            }
-                          </h4>
+                          <SortHeader
+                            display='Category'
+                            column='category'
+                            sortColumn={sortColumn}
+                            sortOrder={sortOrder}
+                          />
                         </th>
-                        <th><h4>Post</h4></th>
+                        <th>Post</th>
                       </tr>
                     </thead>
                     <tbody>
                       {shownPosts.map((post) => (
-                        <tr>
+                        <tr key={post.id}>
                           <td>{timestampToStr(post.timestamp)}</td>
                           <td>{capitalize(post.category)}</td>
                           <td>author:{post.author} - {post.title} - {post.body} <Link to={`/${post.category}/${post.id}`}>View</Link></td>
@@ -103,7 +86,7 @@ class ListPosts extends Component {
           </Col>
         </Row>
       </Grid>
-    );
+    )
   }
 }
 
