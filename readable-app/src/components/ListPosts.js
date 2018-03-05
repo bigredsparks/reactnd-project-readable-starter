@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 //import { Grid, Row, Col, Table, PageHeader } from 'react-bootstrap'
-import { Container, Table } from 'mdbreact'
+import { Container, Button, Card, CardBody, CardText, CardTitle, Row, Col, Table, Navbar, NavbarBrand, NavbarToggler, NavbarNav, NavItem, NavLink } from 'mdbreact'
 import { timestampToStr } from '../utils/dateUtils'
 import { capitalize } from '../utils/stringUtils'
 import SortHeader from './SortHeader'
@@ -35,35 +35,70 @@ class ListPosts extends Component {
 
     return (
       <div>
-      <Container>
+        <Container fluid={true} >
+          {/* <Navbar color="indigo" dark expand="md" fixed="top" scrolling> */}
+          <Navbar color="indigo" dark expand="md" scrolling>
+            <NavbarBrand href="/">Readable</NavbarBrand>
+            <div className="collapse navbar-collapse" id="reactNavbar">
+              <NavbarNav className="ml-auto">
+                <NavItem>
+                  <NavLink className="nav-link" to="/">Categories</NavLink>
+                </NavItem>
+              </NavbarNav>
+            </div>
+          </Navbar>
+        </Container>
+        <Container fluid={true} >
+          <div>Sorter Goes Here</div>
+          {shownPosts.map((post) => (
+            <Card>
+              <CardBody>
+              <CardTitle>
+                {post.author} - {timestampToStr(post.timestamp)} - 1 comment(s)
+              </CardTitle>
+              <CardText>
+                {post.body}
 
-      </Container>
-      <Container fluid={true}>
-        <Table striped>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Category</th>
-              <th>Post</th>
-            </tr>
-          </thead>
-          <tbody>
-            {shownPosts.map((post) => (
-              <tr key={post.id}>
-                <td>{timestampToStr(post.timestamp)}</td>
-                <td>{capitalize(post.category)}</td>
-                <td>author:{post.author} - {post.title} - {post.body} <Link to={`/${post.category}/${post.id}`}>View</Link></td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Container>
+                <div>
+                <span>Votes: {post.voteScore} </span>
+                <a href="#">Up </a>
+                <a href="#">Down </a>
+                <Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button>
+                <Button size={'sm'} color="warning">Edit</Button>
+                <Button size={'sm'} color="danger">Delete</Button>
+                </div>
+              </CardText>
+              </CardBody>
+            </Card>
+          ))}
+        </Container>
+
       </div>
     )
   }
 }
 
 export default ListPosts;
+
+
+{/* <Table striped>
+<thead>
+  <tr>
+    <th>Date</th>
+    <th>Category</th>
+    <th>Post</th>
+  </tr>
+</thead>
+<tbody>
+  {shownPosts.map((post) => (
+    <tr key={post.id}>
+      <td>{timestampToStr(post.timestamp)}</td>
+      <td>{capitalize(post.category)}</td>
+      <td>author:{post.author} - {post.title} - {post.body} <Link to={`/${post.category}/${post.id}`}>View</Link></td>
+    </tr>
+  ))}
+</tbody>
+</Table> */}
 
 
 {/* <Grid>

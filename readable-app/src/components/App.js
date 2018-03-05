@@ -20,8 +20,8 @@ class App extends Component {
         id: '1',
         timestamp: 1518727586111,
         title: 'Title 1',
-        body: 'Body 1',
-        author: 'Author Name',
+        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        author: 'Vince Sparks',
         category: 'react',
         voteScore: 1,
         deleted: false
@@ -30,8 +30,8 @@ class App extends Component {
         id: '2',
         timestamp: 1518727603372,
         title: 'Title 2',
-        body: 'Body 2',
-        author: 'Author Name',
+        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        author: 'Brad Rosse',
         category: 'redux',
         voteScore: 1,
         deleted: false
@@ -40,8 +40,8 @@ class App extends Component {
         id: '3',
         timestamp: 1518727613372,
         title: 'Title 3',
-        body: 'Body 3',
-        author: 'Author Name',
+        body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+        author: 'Nick Wignall',
         category: 'udacity',
         voteScore: 1,
         deleted: false
