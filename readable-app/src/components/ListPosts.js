@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
 //import { Grid, Row, Col, Table, PageHeader } from 'react-bootstrap'
 import { Container, Button, Card, CardBody, CardText, CardTitle, Row, Col, Table, Navbar, NavbarBrand, NavbarToggler, NavbarNav, NavItem, NavLink } from 'mdbreact'
 import { timestampToStr } from '../utils/dateUtils'
@@ -30,7 +31,7 @@ class ListPosts extends Component {
     category && (shownPosts = shownPosts.filter((post) => post.category === category))
 
 //    shownPosts.forEach((p) => (console.log(p.timestamp)))
-    shownPosts.sort(sortBy(sortOrder + sortColumn))
+    shownPosts && shownPosts.sort(sortBy(sortOrder + sortColumn))
     console.log("sortColumn", sortColumn)
 
     return (
@@ -50,14 +51,14 @@ class ListPosts extends Component {
         </Container>
         <Container fluid={true} >
           <div>Sorter Goes Here</div>
-          {shownPosts.map((post) => (
+          {shownPosts && shownPosts.map((post) => (
             <Card>
               <CardBody>
               <CardTitle>
                 {post.author} - {timestampToStr(post.timestamp)}
               </CardTitle>
               <CardText>
-                {post.body}
+                {post.category} - {post.title} - {post.body}
 
                 {/* <div  className='post-data'>
                 <span>Comments: 1 </span>
@@ -69,9 +70,12 @@ class ListPosts extends Component {
                 <Button size={'sm'} color="danger">Delete</Button>
                 </div> */}
 
-                <div className='post-data'>
+
+              </CardText>
+
+              <div className='post-data'>
                 <ul>
-                <li>Comments: 1 </li>
+                <li>Comments: {post.comments.length} </li>
                 <li>Votes: {post.voteScore} </li>
                 <li><a href="#">Up </a></li>
                 <li><a href="#">Down </a></li>
@@ -79,10 +83,10 @@ class ListPosts extends Component {
                 <li><Button size={'sm'} color="warning">Edit</Button></li>
                 <li><Button size={'sm'} color="danger">Delete</Button></li>
                 </ul>
-                </div>
+              </div>
 
-              </CardText>
               </CardBody>
+
             </Card>
           ))}
         </Container>
@@ -92,7 +96,13 @@ class ListPosts extends Component {
   }
 }
 
-export default ListPosts;
+function mapStateToProps(posts) {
+  return {
+    posts
+  }
+}
+
+export default connect(mapStateToProps)(ListPosts);
 
 
 {/* <Table striped>
