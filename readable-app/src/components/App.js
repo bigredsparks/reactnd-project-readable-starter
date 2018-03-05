@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom'
 import ListPosts from './ListPosts'
 import PostCategory from './PostCategory'
 import PostDetail from './PostDetail'
-
 //import 'bootstrap/dist/css/bootstrap.css'
 //import 'bootstrap/dist/css/bootstrap-theme.css'
 //import 'startbootstrap-freelancer/css/freelancer.css'

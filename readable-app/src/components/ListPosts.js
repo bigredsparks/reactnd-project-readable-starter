@@ -54,19 +54,33 @@ class ListPosts extends Component {
             <Card>
               <CardBody>
               <CardTitle>
-                {post.author} - {timestampToStr(post.timestamp)} - 1 comment(s)
+                {post.author} - {timestampToStr(post.timestamp)}
               </CardTitle>
               <CardText>
                 {post.body}
 
-                <div>
+                {/* <div  className='post-data'>
+                <span>Comments: 1 </span>
                 <span>Votes: {post.voteScore} </span>
                 <a href="#">Up </a>
                 <a href="#">Down </a>
                 <Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button>
                 <Button size={'sm'} color="warning">Edit</Button>
                 <Button size={'sm'} color="danger">Delete</Button>
+                </div> */}
+
+                <div className='post-data'>
+                <ul>
+                <li>Comments: 1 </li>
+                <li>Votes: {post.voteScore} </li>
+                <li><a href="#">Up </a></li>
+                <li><a href="#">Down </a></li>
+                <li><Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button></li>
+                <li><Button size={'sm'} color="warning">Edit</Button></li>
+                <li><Button size={'sm'} color="danger">Delete</Button></li>
+                </ul>
                 </div>
+
               </CardText>
               </CardBody>
             </Card>
