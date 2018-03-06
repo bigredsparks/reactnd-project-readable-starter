@@ -37,9 +37,18 @@ const initialPostState = [
 ]
 
 function post (state = initialPostState, action) {
+  const { postId, upVote } = action
+  console.log("action:", action)
   switch (action.type) {
     case VOTE_POST:
-      return state;
+      // map through each post and inc/dec vote score based on up vote
+      const newState = state.map((post) => {
+        if (post.id === postId) {
+          upVote ? post.voteScore++ : post.voteScore && post.voteScore--
+        }
+        return post
+      })
+      return newState;
     default:
       return state
   }

@@ -8,6 +8,7 @@ import { capitalize } from '../utils/stringUtils'
 import SortHeader from './SortHeader'
 import SelectCategory from './SelectCategory'
 import sortBy from 'sort-by'
+import { votePost } from '../actions'
 
 class ListPosts extends Component {
   state = {
@@ -24,15 +25,12 @@ class ListPosts extends Component {
   }
 
   render() {
-    const { posts, categories, category } = this.props
+    const { posts, categories, category, voteForPost } = this.props
     const { sortColumn, sortOrder } = this.state
     let shownPosts = posts
 
     category && (shownPosts = shownPosts.filter((post) => post.category === category))
-
-//    shownPosts.forEach((p) => (console.log(p.timestamp)))
     shownPosts && shownPosts.sort(sortBy(sortOrder + sortColumn))
-    console.log("sortColumn", sortColumn)
 
     return (
       <div>
@@ -54,11 +52,11 @@ class ListPosts extends Component {
           {shownPosts && shownPosts.map((post) => (
             <Card>
               <CardBody>
-              <CardTitle>
-                {post.author} - {timestampToStr(post.timestamp)}
-              </CardTitle>
-              <CardText>
-                {post.category} - {post.title} - {post.body}
+                <CardTitle>
+                  {post.author} - {timestampToStr(post.timestamp)}
+                </CardTitle>
+                <CardText>
+                  {post.category} - {post.title} - {post.body}
 
                 {/* <div  className='post-data'>
                 <span>Comments: 1 </span>
@@ -69,21 +67,18 @@ class ListPosts extends Component {
                 <Button size={'sm'} color="warning">Edit</Button>
                 <Button size={'sm'} color="danger">Delete</Button>
                 </div> */}
-
-
-              </CardText>
-
-              <div className='post-data'>
-                <ul>
-                <li>Comments: {post.comments.length} </li>
-                <li>Votes: {post.voteScore} </li>
-                <li><a href="#">Up </a></li>
-                <li><a href="#">Down </a></li>
-                <li><Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button></li>
-                <li><Button size={'sm'} color="warning">Edit</Button></li>
-                <li><Button size={'sm'} color="danger">Delete</Button></li>
-                </ul>
-              </div>
+                </CardText>
+                <div className='post-data'>
+                  <ul>
+                    <li>Comments: {post.comments.length} </li>
+                    <li>Votes: {post.voteScore} </li>
+                    <li><Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: true})} >+</Button></li>
+                    <li><Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: false})} >-</Button></li>
+                    <li><Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button></li>
+                    <li><Button size={'sm'} color="warning">Edit</Button></li>
+                    <li><Button size={'sm'} color="danger">Delete</Button></li>
+                  </ul>
+                </div>
 
               </CardBody>
 
@@ -102,7 +97,13 @@ function mapStateToProps(posts) {
   }
 }
 
-export default connect(mapStateToProps)(ListPosts);
+function mapDispatchToProps(dispatch) {
+  return {
+    voteForPost: (data) => dispatch(votePost(data))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ListPosts);
 
 
 {/* <Table striped>
