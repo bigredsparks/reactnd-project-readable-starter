@@ -1,19 +1,46 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-//import { Grid, Row, Col, Table, PageHeader } from 'react-bootstrap'
 import { Container, Button, Card, CardBody, CardText, CardTitle, Row, Col, Table, Navbar, NavbarBrand, NavbarToggler, NavbarNav, NavItem, NavLink } from 'mdbreact'
+import Modal from 'react-modal'
+
 import { timestampToStr } from '../utils/dateUtils'
 import { capitalize } from '../utils/stringUtils'
 import SortHeader from './SortHeader'
 import SelectCategory from './SelectCategory'
 import sortBy from 'sort-by'
-import { votePost } from '../actions'
+import { votePost, removePost } from '../actions'
 
 class ListPosts extends Component {
   state = {
     sortColumn: 'timestamp',
-    sortOrder: ''
+    sortOrder: '',
+
+    deleteModalOpen: false,
+    postIdToDelete: undefined,
+  }
+
+  openDeleteModal = (postId) => {
+    this.setState((state) =>({
+      ...state,
+      deleteModalOpen: true,
+      postIdToDelete: postId,
+    }))
+  }
+
+  closeDeleteModal = (confirmed) => {
+    const { postIdToDelete } = this.state
+    const { deletePost } = this.props
+
+    this.setState((state) =>({
+      ...state,
+      deleteModalOpen: false,
+      postIdToDelete: undefined,
+    }))
+
+    if (confirmed) {
+      deletePost({postId: postIdToDelete})
+    }
   }
 
   sortBy = (column) => {
@@ -25,7 +52,7 @@ class ListPosts extends Component {
   }
 
   render() {
-    const { posts, categories, category, voteForPost } = this.props
+    const { posts, categories, category, voteForPost, deletePost } = this.props
     const { sortColumn, sortOrder } = this.state
     let shownPosts = posts
 
@@ -48,7 +75,9 @@ class ListPosts extends Component {
           </Navbar>
         </Container>
         <Container fluid={true} >
-          <div>Sorter Goes Here</div>
+          <div>
+            Sorter Goes Here
+          </div>
           {shownPosts && shownPosts.map((post) => (
             <Card>
               <CardBody>
@@ -76,16 +105,28 @@ class ListPosts extends Component {
                     <li><Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: false})} >-</Button></li>
                     <li><Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button></li>
                     <li><Button size={'sm'} color="warning">Edit</Button></li>
-                    <li><Button size={'sm'} color="danger">Delete</Button></li>
+                    <li><Button size={'sm'} color="danger" onClick={() => this.openDeleteModal(post.id)}>Delete</Button></li>
                   </ul>
                 </div>
-
               </CardBody>
 
             </Card>
           ))}
-        </Container>
 
+          <Modal
+            isOpen={this.state.deleteModalOpen}
+            onRequestClose={this.closeDeleteModal}
+            ariaHideApp={false}
+            contentLabel="Delete Modal" >
+            <div className='modal-header'>Confirm Delete</div>
+            <div className='modal-body'>Are you sure?</div>
+            <div className='modal-footer'>
+              <Button color="success" onClick={() => this.closeDeleteModal(true)}>Yes</Button>
+              <Button color="danger" onClick={() => this.closeDeleteModal(false)}>No</Button>
+            </div>
+          </Modal>
+
+        </Container>
       </div>
     )
   }
@@ -99,11 +140,12 @@ function mapStateToProps(posts) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    voteForPost: (data) => dispatch(votePost(data))
+    voteForPost: (data) => dispatch(votePost(data)),
+    deletePost: (data) => dispatch(removePost(data))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListPosts);
+export default connect(mapStateToProps, mapDispatchToProps)(ListPosts)
 
 
 {/* <Table striped>

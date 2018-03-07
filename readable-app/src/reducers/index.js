@@ -1,4 +1,4 @@
-import { VOTE_POST } from '../actions'
+import { VOTE_POST, REMOVE_POST } from '../actions'
 
 const initialPostState = [
   {
@@ -38,18 +38,22 @@ const initialPostState = [
 
 function post (state = initialPostState, action) {
   const { postId, upVote } = action
+
   console.log("action:", action)
   switch (action.type) {
     case VOTE_POST:
       // map through each post and inc/dec vote score based on up vote
-      const newState = state.map((post) => {
+      return state.map((post) => {
         if (post.id === postId) {
           upVote ? post.voteScore++ : post.voteScore && post.voteScore--
         }
         return post
       })
-      return newState;
-    default:
+
+    case REMOVE_POST:
+      return state.filter((post) => post.id !== postId);
+
+  default:
       return state
   }
 }

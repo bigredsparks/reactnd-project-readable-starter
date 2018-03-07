@@ -1,4 +1,5 @@
 export const VOTE_POST = 'VOTE_POST'
+export const REMOVE_POST = 'REMOVE_POST'
 
 export function votePost({postId, upVote}) {
   //console.log("votePost", postId, upVote)
@@ -8,3 +9,11 @@ export function votePost({postId, upVote}) {
     upVote
   }
 }
+
+export function removePost({postId}) {
+  return {
+    type: REMOVE_POST,
+    postId,
+  }
+}
+
