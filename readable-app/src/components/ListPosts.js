@@ -79,7 +79,7 @@ class ListPosts extends Component {
             Sorter Goes Here
           </div>
           {shownPosts && shownPosts.map((post) => (
-            <Card>
+            <Card key={post.id} >
               <CardBody>
                 <CardTitle>
                   {post.author} - {timestampToStr(post.timestamp)}

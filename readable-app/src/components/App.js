@@ -13,7 +13,7 @@ class App extends Component {
   }
 
   render() {
-    const { posts, categories } = this.state
+    const { categories } = this.state
 
     const categoryPath = `/:category(${categories.join('|')})`
     const detailPath = categoryPath + '/:post_id'
@@ -22,7 +22,6 @@ class App extends Component {
       <div className="App">
         <Route exact path='/' render={() =>(
           <ListPosts
-            posts={posts}
             categories={categories}
           />
         )}/>
@@ -30,14 +29,12 @@ class App extends Component {
           <ListPosts
             category={match.params.category}
             categories={categories}
-            posts={posts}
           />
         )}/>
         <Route exact path={detailPath} render={({history, match}) =>(
           <PostDetail
             category={match.params.category}
             postId={match.params.post_id}
-            posts={posts}
           />
         )}/>
       </div>

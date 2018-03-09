@@ -196,3 +196,6 @@ li {
   display: inline;
 }
 
+textarea {
+  resize: none;
+}
