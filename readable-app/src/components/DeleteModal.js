@@ -3,32 +3,47 @@ import { Button } from 'mdbreact'
 import Modal from 'react-modal'
 
 class DeleteModal extends Component {
-  // componentDidMount = () => {
-  //   console.log('componentDidMount', this.props)
-  // }
+  state = {
+    isOpen: false // keeps track of visible state of modal
+  }
 
-  // shouldComponentUpdate = (nextProps, nextState) => {
-  //   console.log('shouldComponentUpdate', nextProps, nextState)
-  //   return true
-  // }
+  openModal = () => {
+    // show modal
+    this.setState({
+      isOpen: true
+    })
+  }
+
+  closeModal = (confirm) => {
+    // call close callback on parent
+    const { onClose, postId } = this.props
+    onClose && onClose(confirm, postId)
+
+    // hide model
+    this.setState({
+      isOpen: false
+    })
+  }
 
   render() {
-    console.log('render', this.props)
-    const {isModalOpen, closeModal} = this.props
+    const { isOpen } = this.state
 
     return (
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={this.closeModal}
-        ariaHideApp={false}
-        contentLabel="Delete Modal" >
-        <div className='modal-header'>Confirm Delete</div>
-        <div className='modal-body'>Are you sure?</div>
-        <div className='modal-footer'>
-          <Button color="success" onClick={() => closeModal(true)}>Yes</Button>
-          <Button color="danger" onClick={() => closeModal(false)}>No</Button>
-        </div>
-      </Modal>
+      <div>
+        <Button color="danger" size={'sm'} onClick={this.openModal}>Delete</Button>
+        <Modal
+          isOpen={isOpen}
+          onRequestClose={() => this.closeModal(false)}
+          ariaHideApp={false}
+          contentLabel="Delete Modal" >
+          <div className='modal-header'>Confirm Delete</div>
+          <div className='modal-body'>Are you sure?</div>
+          <div className='modal-footer'>
+            <Button color="success" onClick={() => this.closeModal(true)}>Yes</Button>
+            <Button color="danger" onClick={() => this.closeModal(false)}>No</Button>
+          </div>
+        </Modal>
+      </div>
     );
   }
 }

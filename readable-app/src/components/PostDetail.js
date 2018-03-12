@@ -33,44 +33,25 @@ class PostDetail extends Component {
     })
   }
 
-
-  // handlers for delete modal
-  isDeleteModalOpen = () => {
-    return this.state.deleteModalOpen
-  }
-
-  openDeleteModal = (post) => {
+  onCloseDeleteModal = (confirmed, postId) => {
     this.setState({
-      deleteModalOpen: true,
-      postIdToDelete: post.id,
-    })
-  }
-
-  closeDeleteModal = (confirmed) => {
-    const { postIdToDelete } = this.state
-    const { deletePost } = this.props
-
-    this.setState({
-      redirect: confirmed ? true : false,
-      deleteModalOpen: false,
-      postIdToDelete: undefined,
+      redirect: confirmed,
     })
 
     if (confirmed) {
-      deletePost({postId: postIdToDelete})
+      const { deletePost } = this.props
+      deletePost({postId})
     }
   }
 
-
   render() {
     const { category, postId, posts } = this.props
-    const { editModalOpen, deleteModalOpen } = this.state
+    const { editModalOpen, deleteModalOpen, redirect } = this.state
     // TODO
 //    const { from } = this.props.location.state || { from: { pathname: "/" } }
     const from = { pathname: "/" }
 
     console.log("props", this.props)
-    const { redirect } = this.state
 
     if (redirect) {
       return <Redirect to={from} />
@@ -117,7 +98,9 @@ class PostDetail extends Component {
 
           <Col md='12' ><p>{post.body}</p></Col>
           <Button color="warning" size={'sm'} onClick={() => this.openEditModal(post)}>Edit</Button>
-          <Button color="danger" size={'sm'} onClick={() => this.openDeleteModal(post)}>Delete</Button>
+          <DeleteModal
+            onClose={this.onCloseDeleteModal}
+            postId={postId} />
         </Row>
 
         <Row>
@@ -128,7 +111,6 @@ class PostDetail extends Component {
         </Row>
 
       </Container>
-      <DeleteModal isModalOpen={deleteModalOpen} closeModal={this.closeDeleteModal}/>
       <PostEdit post={post} isModalOpen={editModalOpen} closeModal={this.closeEditModal} />
     </div>
     );
