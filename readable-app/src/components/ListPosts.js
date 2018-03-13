@@ -59,7 +59,7 @@ class ListPosts extends Component {
         </Container>
         <Container fluid={true} >
           <div>
-            Sorter Goes Here
+            <AddEditPostModal createPost={true} />
           </div>
           {shownPosts && shownPosts.map((post) => (
             <Card key={post.id} >

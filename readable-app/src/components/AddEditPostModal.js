@@ -3,30 +3,51 @@ import Modal from 'react-modal'
 import { Container, Col, Row, Button, Input } from 'mdbreact'
 import { capitalize } from '../utils/stringUtils'
 import { connect } from 'react-redux'
-import { modifyPost } from '../actions'
+import { createPost, modifyPost } from '../actions'
 
 class AddEditPostModal extends Component {
   state = {
+    creatPost: false,
     postToEdit: undefined,
     isOpen: false // keeps track of visible state of modal
   }
 
   openModal = () => {
-    const { post } = this.props
+    const { createPost } = this.props
+    let { post } = this.props
+
+    if ( !post ) {
+      post = {
+        id: Date.now(),
+        timestamp: Date.now(),
+        author : '',
+        title: '',
+        body: '',
+        category: '',
+        voteScore: 1,
+        deleted: false,
+        comments: []
+      }
+    }
 
     // show modal
     this.setState({
+      createPost,
       postToEdit: post,
       isOpen: true
     })
   }
 
   closeModal = (confirmed) => {
-    const { updatePost } = this.props
-    const { postToEdit } = this.state
+    const { addPost, updatePost } = this.props
+    const { createPost, postToEdit } = this.state
 
     if (confirmed) {
-      updatePost({modifiedPost: postToEdit})
+      if (createPost) {
+        addPost({newPost: postToEdit})
+      } else {
+        updatePost({modifiedPost: postToEdit})
+      }
     }
 
     // hide modal
@@ -76,33 +97,31 @@ class AddEditPostModal extends Component {
   // }
 
   render() {
-    const { post } = this.props
-    const { isOpen } = this.state
-
-    const title = post
-      ? 'Edit Post'
-      : 'Add Post'
+    const { createPost } = this.props
+    const { isOpen, postToEdit } = this.state
 
     return (
       <div>
-        <Button color="warning" size={'sm'} onClick={this.openModal}>Edit</Button>
+        <Button color="warning" size={'sm'} onClick={this.openModal}>{createPost ? 'Create Post' : 'Edit'}</Button>
         <Modal
         isOpen={isOpen}
         onRequestClose={() => this.closeModal(false)}
         ariaHideApp={false}
         contentLabel="Edit Modal" >
-        <div className='modal-header'>{title}</div>
+        <div className='modal-header'>{createPost ? 'Create Post' : 'Edit Post'}</div>
         <div className='modal-body'>
           <Container fluid={true}>
             <Row>
               <Col md='1' >Category</Col>
-              <Col md='11'>{capitalize(post.category)}</Col>
+              <Col md='11'>{createPost
+              ? <div>TODO</div>
+              : postToEdit && capitalize(postToEdit.category)}</Col>
             </Row>
             <Row>
               <Col md='12'>
                 <Input
                   label='Author'
-                  defaultValue={post.author}
+                  defaultValue={postToEdit && postToEdit.author}
                   onChange={this.handleAuthorChange}
                 />
               </Col>
@@ -111,7 +130,7 @@ class AddEditPostModal extends Component {
               <Col md='12'>
                 <Input
                   label='Title'
-                  defaultValue={post.title}
+                  defaultValue={postToEdit && postToEdit.title}
                   onChange={this.handleTitleChange}
                 />
               </Col>
@@ -119,8 +138,9 @@ class AddEditPostModal extends Component {
             <Row>
               <Col md='12'>
                 <Input
+                  label='Body'
                   type='textarea'
-                  defaultValue={post.body}
+                  defaultValue={postToEdit && postToEdit.body}
                   onChange={this.handleBodyChange}
                 />
               </Col>
@@ -138,7 +158,8 @@ class AddEditPostModal extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    updatePost: (data) => dispatch(modifyPost(data))
+    addPost: (data) => dispatch(createPost(data)),
+    updatePost: (data) => dispatch(modifyPost(data)),
   }
 }
 

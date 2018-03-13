@@ -1,4 +1,5 @@
 export const VOTE_POST = 'VOTE_POST'
+export const CREATE_POST = 'CREATE_POST'
 export const REMOVE_POST = 'REMOVE_POST'
 export const MODIFY_POST = 'MODIFY_POST'
 
@@ -7,6 +8,13 @@ export function votePost({postId, upVote}) {
     type: VOTE_POST,
     postId,
     upVote
+  }
+}
+
+export function createPost({newPost}) {
+  return {
+    type: CREATE_POST,
+    newPost,
   }
 }
 

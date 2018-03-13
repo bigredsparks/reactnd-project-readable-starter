@@ -1,4 +1,4 @@
-import { VOTE_POST, REMOVE_POST, MODIFY_POST } from '../actions'
+import { VOTE_POST, CREATE_POST, REMOVE_POST, MODIFY_POST } from '../actions'
 
 const initialPostState = [
   {
@@ -38,7 +38,7 @@ const initialPostState = [
 
 function post (state = initialPostState, action) {
   console.log("action", action)
-  const { postId, upVote, modifiedPost } = action
+  const { postId, upVote, modifiedPost, newPost } = action
 
   switch (action.type) {
     case VOTE_POST:
@@ -49,6 +49,9 @@ function post (state = initialPostState, action) {
         }
         return post
       })
+
+    case CREATE_POST:
+      return [...state, newPost]
 
     case REMOVE_POST:
       return state.filter((post) => post.id !== postId);
