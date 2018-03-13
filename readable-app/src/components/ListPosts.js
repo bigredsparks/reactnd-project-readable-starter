@@ -8,6 +8,7 @@ import { timestampToStr } from '../utils/dateUtils'
 import { capitalize } from '../utils/stringUtils'
 import SortHeader from './SortHeader'
 import SelectCategory from './SelectCategory'
+import DeleteModal from './DeleteModal'
 import sortBy from 'sort-by'
 import { votePost, removePost } from '../actions'
 
@@ -16,30 +17,16 @@ class ListPosts extends Component {
     sortColumn: 'timestamp',
     sortOrder: '',
 
-    deleteModalOpen: false,
-    postIdToDelete: undefined,
   }
 
-  openDeleteModal = (postId) => {
-    this.setState((state) =>({
-      ...state,
-      deleteModalOpen: true,
-      postIdToDelete: postId,
-    }))
-  }
-
-  closeDeleteModal = (confirmed) => {
-    const { postIdToDelete } = this.state
-    const { deletePost } = this.props
-
-    this.setState((state) =>({
-      ...state,
-      deleteModalOpen: false,
-      postIdToDelete: undefined,
-    }))
+  onCloseDeleteModal = (confirmed, postId) => {
+    this.setState({
+      redirect: confirmed,
+    })
 
     if (confirmed) {
-      deletePost({postId: postIdToDelete})
+      const { deletePost } = this.props
+      deletePost({postId})
     }
   }
 
@@ -87,44 +74,24 @@ class ListPosts extends Component {
                 <CardText>
                   {post.category} - {post.title} - {post.body}
 
-                {/* <div  className='post-data'>
-                <span>Comments: 1 </span>
-                <span>Votes: {post.voteScore} </span>
-                <a href="#">Up </a>
-                <a href="#">Down </a>
-                <Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button>
-                <Button size={'sm'} color="warning">Edit</Button>
-                <Button size={'sm'} color="danger">Delete</Button>
-                </div> */}
                 </CardText>
-                <div className='post-data'>
-                  <ul>
-                    <li>Comments: {post.comments.length} </li>
-                    <li>Votes: {post.voteScore} </li>
-                    <li><Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: true})} >+</Button></li>
-                    <li><Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: false})} >-</Button></li>
-                    <li><Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button></li>
-                    <li><Button size={'sm'} color="warning">Edit</Button></li>
-                    <li><Button size={'sm'} color="danger" onClick={() => this.openDeleteModal(post.id)}>Delete</Button></li>
-                  </ul>
-                </div>
+                <Container fluid={true} >
+                <Row>
+                  <span>Comments: {post.comments.length}&nbsp;</span>
+                  <span>Votes: {post.voteScore}&nbsp;</span>
+                  <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: true})} >+</Button>
+                  <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: false})} >-</Button>
+                  <Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button>
+                  <Button size={'sm'} color="warning">Edit</Button>
+                  <DeleteModal
+                    onClose={this.onCloseDeleteModal}
+                    postId={post.id} />
+                </Row>
+                </Container>
               </CardBody>
 
             </Card>
           ))}
-
-          <Modal
-            isOpen={this.state.deleteModalOpen}
-            onRequestClose={this.closeDeleteModal}
-            ariaHideApp={false}
-            contentLabel="Delete Modal" >
-            <div className='modal-header'>Confirm Delete</div>
-            <div className='modal-body'>Are you sure?</div>
-            <div className='modal-footer'>
-              <Button color="success" onClick={() => this.closeDeleteModal(true)}>Yes</Button>
-              <Button color="danger" onClick={() => this.closeDeleteModal(false)}>No</Button>
-            </div>
-          </Modal>
 
         </Container>
       </div>
