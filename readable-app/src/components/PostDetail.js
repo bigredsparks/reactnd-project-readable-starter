@@ -1,36 +1,16 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import { Container, Col, Row, Button, Navbar, NavbarBrand, NavbarToggler, NavbarNav, NavItem, NavLink, Input } from 'mdbreact'
+import { Container, Col, Row, Button, Navbar, NavbarBrand, NavbarToggler, NavbarNav, NavItem, NavLink, } from 'mdbreact'
 import { connect } from 'react-redux'
-import Modal from 'react-modal'
 import DeleteModal from './DeleteModal'
-import PostEdit from './PostEdit'
-import { removePost, modifyPost } from '../actions'
+import AddEditPostModal from './AddEditPostModal'
+import { removePost } from '../actions'
 import { timestampToStr } from '../utils/dateUtils'
 import { capitalize } from '../utils/stringUtils'
 
 class PostDetail extends Component {
   state = {
     redirect: false,
-    deleteModalOpen: false, // controls view state of delete modal
-    editModalOpen: false,
-  }
-
-  openEditModal = (post) => {
-    this.setState({
-      editModalOpen: true,
-    })
-  }
-
-  closeEditModal = (postToEdit) => {
-    if (postToEdit) {
-      const { updatePost } = this.props
-      updatePost({modifiedPost: postToEdit})
-    }
-
-    this.setState({
-      editModalOpen : false,
-    })
   }
 
   onCloseDeleteModal = (confirmed, postId) => {
@@ -45,8 +25,8 @@ class PostDetail extends Component {
   }
 
   render() {
-    const { category, postId, posts } = this.props
-    const { editModalOpen, deleteModalOpen, redirect } = this.state
+    const { postId, posts } = this.props
+    const { redirect } = this.state
     // TODO
 //    const { from } = this.props.location.state || { from: { pathname: "/" } }
     const from = { pathname: "/" }
@@ -97,7 +77,9 @@ class PostDetail extends Component {
           <Col md='11'>{post.title}</Col>
 
           <Col md='12' ><p>{post.body}</p></Col>
-          <Button color="warning" size={'sm'} onClick={() => this.openEditModal(post)}>Edit</Button>
+          <AddEditPostModal
+            post={post}
+          />
           <DeleteModal
             onClose={this.onCloseDeleteModal}
             postId={postId} />
@@ -111,7 +93,6 @@ class PostDetail extends Component {
         </Row>
 
       </Container>
-      <PostEdit post={post} isModalOpen={editModalOpen} closeModal={this.closeEditModal} />
     </div>
     );
   }
@@ -126,8 +107,7 @@ function mapStateToProps(posts) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    deletePost: (data) => dispatch(removePost(data)),
-    updatePost: (data) => dispatch(modifyPost(data))
+    deletePost: (data) => dispatch(removePost(data))
   }
 }
 

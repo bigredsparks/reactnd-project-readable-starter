@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { Container, Button, Card, CardBody, CardText, CardTitle, Row, Col, Table, Navbar, NavbarBrand, NavbarToggler, NavbarNav, NavItem, NavLink } from 'mdbreact'
-import Modal from 'react-modal'
-
+import { Container, Button, Card, CardBody, CardText, CardTitle, Row, Navbar, NavbarBrand, NavbarNav, NavItem, NavLink } from 'mdbreact'
 import { timestampToStr } from '../utils/dateUtils'
-import { capitalize } from '../utils/stringUtils'
-import SortHeader from './SortHeader'
-import SelectCategory from './SelectCategory'
+//import SortHeader from './SortHeader'
+//import SelectCategory from './SelectCategory'
+import AddEditPostModal from './AddEditPostModal'
 import DeleteModal from './DeleteModal'
 import sortBy from 'sort-by'
 import { votePost, removePost } from '../actions'
@@ -16,7 +13,6 @@ class ListPosts extends Component {
   state = {
     sortColumn: 'timestamp',
     sortOrder: '',
-
   }
 
   onCloseDeleteModal = (confirmed, postId) => {
@@ -39,7 +35,7 @@ class ListPosts extends Component {
   }
 
   render() {
-    const { posts, categories, category, voteForPost, deletePost } = this.props
+    const { posts, category, voteForPost } = this.props
     const { sortColumn, sortOrder } = this.state
     let shownPosts = posts
 
@@ -82,7 +78,9 @@ class ListPosts extends Component {
                   <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: true})} >+</Button>
                   <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: false})} >-</Button>
                   <Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button>
-                  <Button size={'sm'} color="warning">Edit</Button>
+                  <AddEditPostModal
+                    post={post}
+                  />
                   <DeleteModal
                     onClose={this.onCloseDeleteModal}
                     postId={post.id} />
@@ -113,78 +111,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListPosts)
-
-
-{/* <Table striped>
-<thead>
-  <tr>
-    <th>Date</th>
-    <th>Category</th>
-    <th>Post</th>
-  </tr>
-</thead>
-<tbody>
-  {shownPosts.map((post) => (
-    <tr key={post.id}>
-      <td>{timestampToStr(post.timestamp)}</td>
-      <td>{capitalize(post.category)}</td>
-      <td>author:{post.author} - {post.title} - {post.body} <Link to={`/${post.category}/${post.id}`}>View</Link></td>
-    </tr>
-  ))}
-</tbody>
-</Table> */}
-
-
-{/* <Grid>
-<Row className='show-grid'>
-  <PageHeader>Readable</PageHeader>
-</Row>
-<Row className='show-grid'>
-  <Col md={2} >
-    <SelectCategory
-      categories={categories}
-    />
-  </Col>
-  <Col md={10}>
-    <div className="ListPosts">
-      <div className="posts">
-        <h2>Posts</h2>
-        <div className="post-list">
-          <Table striped bordered condensed hover >
-            <thead>
-              <tr>
-                <th onClick={() => this.sortBy('timestamp')}>
-                  <SortHeader
-                    display='Date'
-                    column='timestamp'
-                    sortColumn={sortColumn}
-                    sortOrder={sortOrder}
-                  />
-                </th>
-                <th onClick={() => this.sortBy('category')}>
-                  <SortHeader
-                    display='Category'
-                    column='category'
-                    sortColumn={sortColumn}
-                    sortOrder={sortOrder}
-                  />
-                </th>
-                <th>Post</th>
-              </tr>
-            </thead>
-            <tbody>
-              {shownPosts.map((post) => (
-                <tr key={post.id}>
-                  <td>{timestampToStr(post.timestamp)}</td>
-                  <td>{capitalize(post.category)}</td>
-                  <td>author:{post.author} - {post.title} - {post.body} <Link to={`/${post.category}/${post.id}`}>View</Link></td>
-                </tr>
-              ))}
-            </tbody>
-          </Table>
-        </div>
-      </div>
-    </div>
-  </Col>
-</Row>
-</Grid> */}
