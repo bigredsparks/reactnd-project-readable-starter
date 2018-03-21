@@ -199,3 +199,7 @@ li {
 textarea {
   resize: none;
 }
+
+.voter {
+  cursor: pointer;
+}

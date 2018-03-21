@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { Link, Redirect } from 'react-router-dom'
-import { Container, Col, Row, Button, Navbar, NavbarBrand, NavbarToggler, NavbarNav, NavItem, NavLink, } from 'mdbreact'
+import { Container, Card, CardBody, CardText, CardTitle, Col, Row, Button, Navbar, NavbarBrand, NavbarToggler, NavbarNav, NavItem, NavLink, } from 'mdbreact'
 import { connect } from 'react-redux'
 import DeleteModal from './DeleteModal'
 import AddEditPostModal from './AddEditPostModal'
+import AddEditCommentModal from './AddEditCommentModal'
 import { removePost } from '../actions'
 import { timestampToStr } from '../utils/dateUtils'
 import { capitalize } from '../utils/stringUtils'
@@ -25,7 +26,7 @@ class PostDetail extends Component {
   }
 
   render() {
-    const { postId, posts } = this.props
+    const { postId, posts, comments } = this.props
     const { redirect } = this.state
     // TODO
 //    const { from } = this.props.location.state || { from: { pathname: "/" } }
@@ -38,6 +39,7 @@ class PostDetail extends Component {
     }
 
     const post = posts.find((post) => post.id === postId)
+    const postComments = comments.filter((comment) => comment.parentId === postId)
 
     return (
       <div>
@@ -86,10 +88,24 @@ class PostDetail extends Component {
         </Row>
 
         <Row>
-          Comments ({post.comments.length})
+          Comments ({postComments.length})
         </Row>
         <Row>
-          <Button color="primary" size={'sm'} >Add Comment</Button>
+          <AddEditCommentModal createComment={true} postId={postId} />
+        </Row>
+        <Row>
+          {postComments.map((comment) => (
+            <Card key={comment.id} >
+              <CardBody>
+                <CardTitle>
+                  {comment.id} - {timestampToStr(comment.timestamp)}
+                </CardTitle>
+                <CardText>
+                  {comment.id} - {timestampToStr(comment.timestamp)}
+                  </CardText>
+              </CardBody>
+            </Card>
+          ))}
         </Row>
 
       </Container>
@@ -98,10 +114,12 @@ class PostDetail extends Component {
   }
 }
 
-function mapStateToProps(posts) {
+function mapStateToProps({posts, comments}) {
+  //console.log("XXX", post)
 //  console.log("ownprops", ownProps)
   return {
-    posts
+    posts,
+    comments
   }
 }
 

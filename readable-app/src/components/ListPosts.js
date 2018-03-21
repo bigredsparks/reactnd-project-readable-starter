@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Container, Button, Card, CardBody, CardText, CardTitle, Row, Navbar, NavbarBrand, NavbarNav, NavItem, NavLink } from 'mdbreact'
+import { Container, Button, Card, CardBody, CardText, CardTitle, Col, Row, Navbar, NavbarBrand, NavbarNav, NavItem, NavLink, Badge } from 'mdbreact'
 import { timestampToStr } from '../utils/dateUtils'
 //import SortHeader from './SortHeader'
 //import SelectCategory from './SelectCategory'
@@ -73,10 +73,16 @@ class ListPosts extends Component {
                 </CardText>
                 <Container fluid={true} >
                 <Row>
+                  <Col md='3'>
                   <span>Comments: {post.comments.length}&nbsp;</span>
                   <span>Votes: {post.voteScore}&nbsp;</span>
-                  <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: true})} >+</Button>
-                  <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: false})} >-</Button>
+                  <Badge className='voter' color='primary' pill onClick={() => voteForPost({postId: post.id, upVote: true})}>+</Badge>&nbsp;
+                  <Badge className='voter' color='primary' pill onClick={() => voteForPost({postId: post.id, upVote: false})}>-</Badge>
+                  </Col>
+                  <Col md='9'>
+                  <Row>
+                  {/* <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: true})} >+</Button>
+                  <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: false})} >-</Button> */}
                   <Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button>
                   <AddEditPostModal
                     post={post}
@@ -84,6 +90,8 @@ class ListPosts extends Component {
                   <DeleteModal
                     onClose={this.onCloseDeleteModal}
                     postId={post.id} />
+                    </Row>
+                  </Col>
                 </Row>
                 </Container>
               </CardBody>

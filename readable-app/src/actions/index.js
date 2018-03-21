@@ -3,6 +3,11 @@ export const CREATE_POST = 'CREATE_POST'
 export const REMOVE_POST = 'REMOVE_POST'
 export const MODIFY_POST = 'MODIFY_POST'
 
+export const VOTE_COMMENT = 'VOTE_COMMENT'
+export const CREATE_COMMENT = 'CREATE_COMMENT'
+export const REMOVE_COMMENT = 'REMOVE_COMMENT'
+export const MODIFY_COMMENT = 'MODIFY_COMMENT'
+
 export function votePost({postId, upVote}) {
   return {
     type: VOTE_POST,
@@ -29,6 +34,20 @@ export function modifyPost({modifiedPost}) {
   return {
     type: MODIFY_POST,
     modifiedPost
+  }
+}
+
+export function createComment({newComment}) {
+  return {
+    type: CREATE_COMMENT,
+    newComment,
+  }
+}
+
+export function modifyComment({modifiedComment}) {
+  return {
+    type: MODIFY_COMMENT,
+    modifiedComment
   }
 }
 

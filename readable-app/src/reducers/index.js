@@ -1,4 +1,9 @@
-import { VOTE_POST, CREATE_POST, REMOVE_POST, MODIFY_POST } from '../actions'
+import { combineReducers } from 'redux'
+
+import {
+  VOTE_POST, CREATE_POST, REMOVE_POST, MODIFY_POST,
+  VOTE_COMMENT, CREATE_COMMENT, REMOVE_COMMENT, MODIFY_COMMENT
+} from '../actions'
 
 const initialPostState = [
   {
@@ -36,8 +41,8 @@ const initialPostState = [
   },
 ]
 
-function post (state = initialPostState, action) {
-  console.log("action", action)
+function posts (state = initialPostState, action) {
+  console.log("posts action", action)
   const { postId, upVote, modifiedPost, newPost } = action
 
   switch (action.type) {
@@ -45,7 +50,7 @@ function post (state = initialPostState, action) {
       // map through each post and inc/dec vote score based on up vote
       return state.map((post) => {
         if (post.id === postId) {
-          upVote ? post.voteScore++ : post.voteScore && post.voteScore--
+          upVote ? post.voteScore++ : post.voteScore--
         }
         return post
       })
@@ -65,9 +70,48 @@ function post (state = initialPostState, action) {
         return post
       })
 
-  default:
+    default:
       return state
   }
 }
 
-export default post
+function comments (state = [], action) {
+  console.log("comments action", action)
+  const { commentId, upVote, modifiedComment, newComment } = action
+
+  switch (action.type) {
+    case VOTE_COMMENT:
+      // map through each post and each comment and inc/dec vote score based on up vote
+      return state.map((comment) => {
+        if (comment.id === commentId ) {
+          upVote ? comment.voteScore++ : comment.voteScore--
+        }
+        return comment
+      })
+
+    case CREATE_COMMENT:
+      return [...state, newComment]
+
+    case REMOVE_COMMENT:
+      return state.filter((comment) => comment.id !== commentId);
+
+    case MODIFY_COMMENT:
+      // map through each post and replace modified post
+      return state.map((comment) => {
+        if (comment.id === modifiedComment.id) {
+          return modifiedComment
+        }
+        return comment
+      })
+
+    default:
+      return state
+  }
+}
+
+ export default combineReducers({
+   posts,
+   comments,
+ })
+
+//export default post
