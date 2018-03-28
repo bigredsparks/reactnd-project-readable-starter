@@ -16,10 +16,6 @@ class ListPosts extends Component {
   }
 
   onCloseDeleteModal = (confirmed, postId) => {
-    this.setState({
-      redirect: confirmed,
-    })
-
     if (confirmed) {
       const { deletePost } = this.props
       deletePost({postId})
@@ -39,7 +35,11 @@ class ListPosts extends Component {
     const { sortColumn, sortOrder } = this.state
     let shownPosts = posts
 
+    // if category is defined only show posts for category
     category && (shownPosts = shownPosts.filter((post) => post.category === category))
+
+    // show only posts that are not deleted
+    shownPosts = shownPosts.filter((post) => !post.deleted)
     shownPosts && shownPosts.sort(sortBy(sortOrder + sortColumn))
 
     return (
@@ -88,7 +88,7 @@ class ListPosts extends Component {
                   />
                   <DeleteModal
                     onClose={this.onCloseDeleteModal}
-                    postId={post.id} />
+                    id={post.id} />
                     </Row>
                   </Col>
                 </Row>
