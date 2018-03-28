@@ -45,16 +45,15 @@ class ListPosts extends Component {
     return (
       <div>
         <Container fluid={true} >
-          {/* <Navbar color="indigo" dark expand="md" fixed="top" scrolling> */}
           <Navbar color="indigo" dark expand="md" scrolling>
             <NavbarBrand href="/">Readable</NavbarBrand>
-            <div className="collapse navbar-collapse" id="reactNavbar">
+            {/* <div className="collapse navbar-collapse" id="reactNavbar">
               <NavbarNav className="ml-auto">
                 <NavItem>
                   <NavLink className="nav-link" to="/">Categories</NavLink>
                 </NavItem>
               </NavbarNav>
-            </div>
+            </div> */}
           </Navbar>
         </Container>
         <Container fluid={true} >
@@ -73,17 +72,17 @@ class ListPosts extends Component {
                 </CardText>
                 <Container fluid={true} >
                 <Row>
-                  <Col md='3'>
+                  <Col md='4'>
                   <span>Comments: {post.comments.length}&nbsp;</span>
                   <span>Votes: {post.voteScore}&nbsp;</span>
-                  <Badge className='voter' color='primary' pill onClick={() => voteForPost({postId: post.id, upVote: true})}>+</Badge>&nbsp;
-                  <Badge className='voter' color='primary' pill onClick={() => voteForPost({postId: post.id, upVote: false})}>-</Badge>
+                  <Badge className='voter' color='success' pill onClick={() => voteForPost({postId: post.id, upVote: true})}>+</Badge>&nbsp;
+                  <Badge className='voter' color='danger' pill onClick={() => voteForPost({postId: post.id, upVote: false})}>-</Badge>
                   </Col>
-                  <Col md='9'>
+                  <Col md='8'>
                   <Row>
                   {/* <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: true})} >+</Button>
                   <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: false})} >-</Button> */}
-                  <Button size={'sm'} color='success' href={`/${post.category}/${post.id}`} >View</Button>
+                  <Button size={'sm'} color='primary' href={`/${post.category}/${post.id}`} >View</Button>
                   <AddEditPostModal
                     post={post}
                   />
@@ -105,7 +104,8 @@ class ListPosts extends Component {
   }
 }
 
-function mapStateToProps(posts) {
+function mapStateToProps({posts}) {
+//  console.log("ListPosts.posts", posts)
   return {
     posts
   }

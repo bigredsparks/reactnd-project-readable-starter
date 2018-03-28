@@ -37,12 +37,28 @@ export function modifyPost({modifiedPost}) {
   }
 }
 
+export function voteComment({commentId, upVote}) {
+  return {
+    type: VOTE_COMMENT,
+    commentId,
+    upVote
+  }
+}
+
 export function createComment({newComment}) {
   return {
     type: CREATE_COMMENT,
     newComment,
   }
 }
+
+export function removeComment({commentId}) {
+  return {
+    type: REMOVE_COMMENT,
+    commentId,
+  }
+}
+
 
 export function modifyComment({modifiedComment}) {
   return {

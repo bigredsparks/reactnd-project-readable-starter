@@ -203,3 +203,7 @@ textarea {
 .voter {
   cursor: pointer;
 }
+
+.label {
+  font-weight: bold;
+}

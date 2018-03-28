@@ -16,8 +16,8 @@ class DeleteModal extends Component {
 
   closeModal = (confirm) => {
     // call close callback on parent
-    const { onClose, postId } = this.props
-    onClose && onClose(confirm, postId)
+    const { onClose, id } = this.props
+    onClose && onClose(confirm, id)
 
     // hide model
     this.setState({
@@ -29,7 +29,7 @@ class DeleteModal extends Component {
     const { isOpen } = this.state
 
     return (
-      <div>
+      <div  >
         <Button color="danger" size={'sm'} onClick={this.openModal}>Delete</Button>
         <Modal
           isOpen={isOpen}

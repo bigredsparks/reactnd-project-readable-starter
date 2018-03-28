@@ -95,7 +95,7 @@ class AddEditCommentModal extends Component {
 
     return (
       <div>
-        <Button color="primary" size={'sm'} onClick={this.openModal}>{createComment ? 'Add Comment' : 'Edit'}</Button>
+        <Button color={createComment ? 'success' : 'warning'} size={'sm'} onClick={this.openModal}>{createComment ? 'Add Comment' : 'Edit'}</Button>
         <Modal
         isOpen={isOpen}
         onRequestClose={() => this.closeModal(false)}
