@@ -100,14 +100,6 @@ class AddEditPostModal extends Component {
     })
   }
 
-
-  // componentDidMount() {
-  //   const { post } = this.props
-  //   this.setState({
-  //     postToEdit: post
-  //   })
-  // }
-
   render() {
     const { createPost } = this.props
     const { isOpen, postToEdit } = this.state

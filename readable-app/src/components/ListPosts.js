@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
+import { Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Container, Button, Card, CardBody, CardText, CardTitle, Col, Row, Navbar, NavbarBrand, NavbarNav, NavItem, NavLink, Badge } from 'mdbreact'
 import { capitalize } from '../utils/stringUtils'
 import { timestampToStr } from '../utils/dateUtils'
-//import SortHeader from './SortHeader'
-//import SelectCategory from './SelectCategory'
 import AddEditPostModal from './AddEditPostModal'
 import DeleteModal from './DeleteModal'
 import sortBy from 'sort-by'
@@ -12,8 +11,8 @@ import { votePost, removePost } from '../actions'
 
 class ListPosts extends Component {
   state = {
-    sortColumn: 'timestamp',
-    sortOrder: '',
+    sortKey: 'timestamp',
+    category: ''
   }
 
   onCloseDeleteModal = (confirmed, postId) => {
@@ -23,17 +22,25 @@ class ListPosts extends Component {
     }
   }
 
-  sortBy = (column) => {
-    // only one column can be sorted at any one time
-    this.setState((state) => ({
-      sortColumn: column,
-      sortOrder: state.sortOrder === '' ? '-' : ''
-    }))
+  sortBy = (event) => {
+    const sortKey = event.target.value
+    this.setState({
+      sortKey
+    })
+  }
+
+  handleCategoryChange = (event) => {
+    const { history } = this.props
+    const category = event.target.value
+    this.setState({
+      category
+    })
+    history.push('/' + category)
   }
 
   render() {
     const { posts, category, voteForPost } = this.props
-    const { sortColumn, sortOrder } = this.state
+    const { sortKey, redirect } = this.state
     let shownPosts = posts
 
     // if category is defined only show posts for category
@@ -41,7 +48,7 @@ class ListPosts extends Component {
 
     // show only posts that are not deleted
     shownPosts = shownPosts.filter((post) => !post.deleted)
-    shownPosts && shownPosts.sort(sortBy(sortOrder + sortColumn))
+    shownPosts && shownPosts.sort(sortBy(sortKey))
 
     return (
       <div>
@@ -59,6 +66,25 @@ class ListPosts extends Component {
         </Container>
         <Container fluid={true} >
           <div>
+            Categories: <select
+                onChange={this.handleCategoryChange}
+                value={category || ''}
+                >
+                <option value=''>All</option>
+                <option value='react'>React</option>
+                <option value='redux'>Redux</option>
+                <option value='udacity'>Udacity</option>
+            </select>
+
+            {' '}Sort by: <select
+                  onChange={this.sortBy}
+                  value={sortKey || '+timestamp'}
+                >
+                <option value='timestamp'>Oldest</option>
+                <option value='-timestamp'>Newest</option>
+                <option value='-voteScore'>Highest Vote</option>
+                <option value='voteScore'>Lowest Vote</option>
+            </select>
             <AddEditPostModal createPost={true} />
           </div>
           {shownPosts && shownPosts.map((post) => (

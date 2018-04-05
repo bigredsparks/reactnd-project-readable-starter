@@ -20,15 +20,17 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Route exact path='/' render={() =>(
+        <Route exact path='/' render={({history}) =>(
           <ListPosts
             categories={categories}
+            history={history}
           />
         )}/>
         <Route exact path={categoryPath} render={({history, match}) =>(
           <ListPosts
             category={match.params.category}
             categories={categories}
+            history={history}
           />
         )}/>
         <Route exact path={detailPath} render={({history, match}) =>(
