@@ -89,6 +89,18 @@ class AddEditPostModal extends Component {
     })
   }
 
+  handleCategoryChange = (event) => {
+    const category = event.target.value
+    const { postToEdit } = this.state
+    this.setState({
+      postToEdit: {
+        ...postToEdit,
+        category
+      }
+    })
+  }
+
+
   // componentDidMount() {
   //   const { post } = this.props
   //   this.setState({
@@ -114,7 +126,17 @@ class AddEditPostModal extends Component {
             <Row>
               <Col md='1' >Category</Col>
               <Col md='11'>{createPost
-              ? <div>TODO</div>
+              ? <div>
+              <select
+                  onChange={this.handleCategoryChange}
+                  value={postToEdit ? postToEdit.category : ''}
+                  >
+                  <option value='' disabled>Select Category...</option>
+                  <option value='react'>React</option>
+                  <option value='redux'>Redux</option>
+                  <option value='udacity'>Udacity</option>
+                </select>
+              </div>
               : postToEdit && capitalize(postToEdit.category)}</Col>
             </Row>
             <Row>

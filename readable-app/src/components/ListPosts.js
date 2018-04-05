@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Container, Button, Card, CardBody, CardText, CardTitle, Col, Row, Navbar, NavbarBrand, NavbarNav, NavItem, NavLink, Badge } from 'mdbreact'
+import { capitalize } from '../utils/stringUtils'
 import { timestampToStr } from '../utils/dateUtils'
 //import SortHeader from './SortHeader'
 //import SelectCategory from './SelectCategory'
@@ -67,7 +68,7 @@ class ListPosts extends Component {
                   {post.author} - {timestampToStr(post.timestamp)}
                 </CardTitle>
                 <CardText>
-                  {post.category} - {post.title} - {post.body}
+                  {capitalize(post.category)} - {post.title} - {post.body}
 
                 </CardText>
                 <Container fluid={true} >

@@ -59,7 +59,6 @@ function posts (state = initialPostState, action) {
       return [...state, newPost]
 
     case REMOVE_POST:
-      //return state.filter((post) => post.id !== postId);
       return state.map((post) => {
         if (post.id === postId) {
           return { ...post, deleted: true}
@@ -99,7 +98,13 @@ function comments (state = [], action) {
       return [...state, newComment]
 
     case REMOVE_COMMENT:
-      return state.filter((comment) => comment.id !== commentId);
+//      return state.filter((comment) => comment.id !== commentId);
+      return state.map((comment) => {
+        if (comment.id === commentId) {
+          return { ...comment, deleted: true}
+        }
+        return comment;
+      })
 
     case MODIFY_COMMENT:
       // map through each post and replace modified post

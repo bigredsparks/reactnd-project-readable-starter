@@ -47,7 +47,7 @@ class PostDetail extends Component {
     }
 
     const post = posts.find((post) => post.id === postId)
-    const postComments = comments.filter((comment) => comment.parentId === postId)
+    const postComments = comments.filter((comment) => comment.parentId === postId && !comment.deleted)
 
     return (
       <div>
