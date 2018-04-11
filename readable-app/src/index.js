@@ -19,13 +19,13 @@ const store = createStore(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 )
 
-console.log(store.getState())
+//console.log(store.getState())
 
 ReactDOM.render(
-  <BrowserRouter>
     <Provider store={store}>
-      <App />
-    </Provider>
-  </BrowserRouter>,
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </Provider>,
   document.getElementById('root')
 )

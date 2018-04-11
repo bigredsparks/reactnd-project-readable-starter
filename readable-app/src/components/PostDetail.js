@@ -5,13 +5,29 @@ import { connect } from 'react-redux'
 import DeleteModal from './DeleteModal'
 import AddEditPostModal from './AddEditPostModal'
 import AddEditCommentModal from './AddEditCommentModal'
-import { removePost, voteComment, removeComment } from '../actions'
 import { timestampToStr } from '../utils/dateUtils'
 import { capitalize } from '../utils/stringUtils'
+import * as actions from '../actions'
+import * as PostsApi from './PostsApi'
 
 class PostDetail extends Component {
   state = {
     redirect: false,
+  }
+
+  componentDidMount() {
+    this.fetchPost()
+  }
+
+  fetchPost = () => {
+    const {postId, getPost, getComments} = this.props
+    PostsApi.getPostById(postId).then((post) => {
+      getPost(post)
+    })
+
+    PostsApi.getPostComments(postId).then((comments) => {
+      getComments(comments)
+    })
   }
 
   onCloseDeleteModal = (confirmed, id) => {
@@ -32,22 +48,22 @@ class PostDetail extends Component {
     }
   }
 
-
   render() {
-    const { postId, posts, comments, voteForComment } = this.props
+//    const { postId, posts, comments, voteForComment } = this.props
+    const { post, comments, voteForComment } = this.props
     const { redirect } = this.state
     // TODO
 //    const { from } = this.props.location.state || { from: { pathname: "/" } }
     const from = { pathname: "/" }
 
-    console.log("props", this.props)
+//    console.log("props", this.props)
 
     if (redirect) {
       return <Redirect to={from} />
     }
 
-    const post = posts.find((post) => post.id === postId)
-    const postComments = comments.filter((comment) => comment.parentId === postId && !comment.deleted)
+//    const post = posts.find((post) => post.id === postId)
+   const postComments = comments.filter((comment) => comment.parentId === post.id && !comment.deleted)
 
     return (
       <div>
@@ -91,14 +107,14 @@ class PostDetail extends Component {
           />
           <DeleteModal
             onClose={this.onCloseDeleteModal}
-            id={postId} />
+            id={post.id} />
         </Row>
 
         <Row>
           Comments ({postComments.length})
         </Row>
         <Row>
-          <AddEditCommentModal createComment={true} postId={postId} />
+          <AddEditCommentModal createComment={true} postId={post.id} />
         </Row>
         <Row>
         <Container fluid={true} >
@@ -146,18 +162,21 @@ class PostDetail extends Component {
   }
 }
 
-function mapStateToProps({posts, comments}) {
+function mapStateToProps({posts, comments, post}) {
   return {
     posts,
-    comments
+    comments,
+    post
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    voteForComment: (data) => dispatch(voteComment(data)),
-    deletePost: (data) => dispatch(removePost(data)),
-    deleteComment: (data) => dispatch(removeComment(data))
+    // voteForComment: (data) => dispatch(actions.voteComment(data)),
+    // deletePost: (data) => dispatch(actions.removePost(data)),
+    // deleteComment: (data) => dispatch(actions.removeComment(data)),
+    getPost: (data) => dispatch(actions.getPost(data)),
+    getComments: (data) => dispatch(actions.getComments(data))
   }
 }
 

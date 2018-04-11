@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import { Redirect, Link, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { Container, Button, Card, CardBody, CardText, CardTitle, Col, Row, Navbar, NavbarBrand, NavbarNav, NavItem, NavLink, Badge } from 'mdbreact'
 import { capitalize } from '../utils/stringUtils'
@@ -7,7 +7,9 @@ import { timestampToStr } from '../utils/dateUtils'
 import AddEditPostModal from './AddEditPostModal'
 import DeleteModal from './DeleteModal'
 import sortBy from 'sort-by'
-import { votePost, removePost } from '../actions'
+//import { votePost, removePost, initPosts, initComments } from '../actions'
+import * as actions from '../actions'
+import * as PostsApi from './PostsApi'
 
 class ListPosts extends Component {
   state = {
@@ -15,10 +17,37 @@ class ListPosts extends Component {
     category: ''
   }
 
+  componentDidMount() {
+    this.fetchPosts()
+  }
+
+  componentDidUpdate(prevProps) {
+     if(prevProps.category !== this.props.category) {
+       this.fetchPosts()
+     }
+  }
+
+  fetchPosts = () => {
+    const {getPosts, category} = this.props
+
+    if (category) {
+      PostsApi.getPostsByCategory(category).then((posts) => {
+        getPosts(posts)
+      })
+    }
+    else {
+      PostsApi.getPosts().then((posts) => {
+        getPosts(posts)
+      })
+    }
+  }
+
   onCloseDeleteModal = (confirmed, postId) => {
     if (confirmed) {
       const { deletePost } = this.props
-      deletePost({postId})
+      PostsApi.deletePostById(postId).then(() => {
+        deletePost({postId})
+      })
     }
   }
 
@@ -44,7 +73,7 @@ class ListPosts extends Component {
     let shownPosts = posts
 
     // if category is defined only show posts for category
-    category && (shownPosts = shownPosts.filter((post) => post.category === category))
+    //category && (shownPosts = shownPosts.filter((post) => post.category === category))
 
     // show only posts that are not deleted
     shownPosts = shownPosts.filter((post) => !post.deleted)
@@ -100,19 +129,19 @@ class ListPosts extends Component {
                 <Container fluid={true} >
                 <Row>
                   <Col md='4'>
-                  <span>Comments: {post.comments.length}&nbsp;</span>
-                  <span>Votes: {post.voteScore}&nbsp;</span>
-                  <Badge className='voter' color='success' pill onClick={() => voteForPost({postId: post.id, upVote: true})}>+</Badge>&nbsp;
-                  <Badge className='voter' color='danger' pill onClick={() => voteForPost({postId: post.id, upVote: false})}>-</Badge>
+                    <span>Comments: {post.commentCount}&nbsp;</span>
+                    <span>Votes: {post.voteScore}&nbsp;</span>
+                    <Badge className='voter' color='success' pill onClick={() => voteForPost({postId: post.id, upVote: true})}>+</Badge>&nbsp;
+                    <Badge className='voter' color='danger' pill onClick={() => voteForPost({postId: post.id, upVote: false})}>-</Badge>
                   </Col>
                   <Col md='8'>
-                  <Row>
+                    <Row>
                   {/* <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: true})} >+</Button>
                   <Button className='badge badge-pill' size={'sm'} color='primary' onClick={() => voteForPost({postId: post.id, upVote: false})} >-</Button> */}
-                  <Button size={'sm'} color='primary' href={`/${post.category}/${post.id}`} >View</Button>
-                  <AddEditPostModal
-                    post={post}
-                  />
+                    <Button size={'sm'} color='primary' href={`/${post.category}/${post.id}`} >View</Button>
+                    <AddEditPostModal
+                      post={post}
+                    />
                   <DeleteModal
                     onClose={this.onCloseDeleteModal}
                     id={post.id} />
@@ -140,9 +169,12 @@ function mapStateToProps({posts}) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    voteForPost: (data) => dispatch(votePost(data)),
-    deletePost: (data) => dispatch(removePost(data))
+    // voteForPost: (data) => dispatch(votePost(data)),
+    deletePost: (data) => dispatch(actions.removePost(data)),
+    // initializePosts: (data) => dispatch(initPosts(data)),
+    // initializeComments: (data) => dispatch(initComments(data)),
+    getPosts:(data) => dispatch(actions.getPosts(data))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListPosts)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ListPosts))
