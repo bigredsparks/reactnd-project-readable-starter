@@ -3,7 +3,9 @@ import Modal from 'react-modal'
 import { Container, Col, Row, Button, Input } from 'mdbreact'
 import { capitalize } from '../utils/stringUtils'
 import { connect } from 'react-redux'
-import { createPost, modifyPost } from '../actions'
+//import { createPost, modifyPost } from '../actions'
+import * as actions from '../actions'
+import * as PostsApi from './PostsApi'
 
 class AddEditPostModal extends Component {
   state = {
@@ -44,9 +46,15 @@ class AddEditPostModal extends Component {
 
     if (confirmed) {
       if (createPost) {
-        addPost({newPost: postToEdit})
+//        addPost({newPost: postToEdit})
+        PostsApi.insertPost(postToEdit).then((post) =>{
+          addPost(post)
+        })
+
       } else {
-        updatePost({modifiedPost: postToEdit})
+        PostsApi.updatePost(postToEdit).then((post) =>{
+          updatePost(post)
+        })
       }
     }
 
@@ -172,8 +180,8 @@ class AddEditPostModal extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addPost: (data) => dispatch(createPost(data)),
-    updatePost: (data) => dispatch(modifyPost(data)),
+    addPost: (data) => dispatch(actions.createPost(data)),
+    updatePost: (data) => dispatch(actions.modifyPost(data)),
   }
 }
 

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import ListPosts from './ListPosts'
 import PostDetail from './PostDetail'
 // import { initPosts, initComments } from '../actions'
-// import * as PostsApi from './PostsApi'
+//import * as PostsApi from './PostsApi'
 
 class App extends Component {
   state = {
@@ -34,7 +34,6 @@ class App extends Component {
 
     const categoryPath = `/:category(${categories.join('|')})`
     const detailPath = categoryPath + '/:post_id'
-
 
     return (
       <div className="App">

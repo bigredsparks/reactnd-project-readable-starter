@@ -45,8 +45,8 @@ class ListPosts extends Component {
   onCloseDeleteModal = (confirmed, postId) => {
     if (confirmed) {
       const { deletePost } = this.props
-      PostsApi.deletePostById(postId).then(() => {
-        deletePost({postId})
+      PostsApi.deletePostById(postId).then((post) => {
+        deletePost(post)
       })
     }
   }

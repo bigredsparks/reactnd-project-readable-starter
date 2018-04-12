@@ -67,12 +67,12 @@ function posts (state = initialPostState, action) {
       })
 
     case CREATE_POST:
-      return [...state, newPost]
+      return [...state, action.post]
 
     case REMOVE_POST:
       return state.map((post) => {
-        if (post.id === postId) {
-          return { ...post, deleted: true}
+        if (post.id === action.post.id) {
+          return action.post
         }
         return post;
       })
@@ -80,10 +80,13 @@ function posts (state = initialPostState, action) {
     case MODIFY_POST:
       // map through each post and replace modified post
       return state.map((post) => {
-        if (post.id === modifiedPost.id) {
-          return modifiedPost
-        }
-        return post
+        return post.id === action.post.id
+        ? action.post
+        : post
+        // if (post.id === action.post.id) {
+        //   return action.post
+        // }
+        // return post
       })
 
     default:

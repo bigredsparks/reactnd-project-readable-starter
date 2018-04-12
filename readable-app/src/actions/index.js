@@ -43,24 +43,24 @@ export function votePost({postId, upVote}) {
   }
 }
 
-export function createPost({newPost}) {
+export function createPost(post) {
   return {
     type: CREATE_POST,
-    newPost,
+    post,
   }
 }
 
-export function removePost({postId}) {
+export function removePost(post) {
   return {
     type: REMOVE_POST,
-    postId,
+    post,
   }
 }
 
-export function modifyPost({modifiedPost}) {
+export function modifyPost(post) {
   return {
     type: MODIFY_POST,
-    modifiedPost
+    post
   }
 }
 
