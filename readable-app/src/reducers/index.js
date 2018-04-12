@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux'
-import * as PostsApi from '../components/PostsApi'
 import {
   GET_POSTS, VOTE_POST, CREATE_POST, REMOVE_POST, MODIFY_POST,
   GET_COMMENTS, VOTE_COMMENT, CREATE_COMMENT, REMOVE_COMMENT, MODIFY_COMMENT,
@@ -43,50 +42,22 @@ import {
 // ]
 
 
-let initialPostState = []
-
-function posts (state = initialPostState, action) {
-  console.log("posts action", action, state)
-  const { postId, upVote, modifiedPost, newPost, posts } = action
-
+function posts (state = [], action) {
   switch (action.type) {
     case GET_POSTS:
       return action.posts
 
-    // case INIT_POSTS:
-    //   console.log("api posts", posts)
-    //   return [...state, ...posts]
-
-    case VOTE_POST:
-      // map through each post and inc/dec vote score based on up vote
-      return state.map((post) => {
-        if (post.id === postId) {
-          upVote ? post.voteScore++ : post.voteScore--
-        }
-        return post
-      })
-
     case CREATE_POST:
       return [...state, action.post]
 
+    case VOTE_POST:
     case REMOVE_POST:
-      return state.map((post) => {
-        if (post.id === action.post.id) {
-          return action.post
-        }
-        return post;
-      })
-
     case MODIFY_POST:
-      // map through each post and replace modified post
+    // map through each post and inc/dec vote score based on up vote
       return state.map((post) => {
         return post.id === action.post.id
         ? action.post
         : post
-        // if (post.id === action.post.id) {
-        //   return action.post
-        // }
-        // return post
       })
 
     default:
@@ -95,46 +66,25 @@ function posts (state = initialPostState, action) {
 }
 
 function comments (state = [], action) {
-  //console.log("comments action", action)
-  const { commentId, upVote, modifiedComment, newComment, initComments } = action
-
   switch (action.type) {
     // case INIT_COMMENTS:
     //    console.log("api comments", initComments)
     //    const newstate = [...state, ...initComments]
     //    return newstate
     case GET_COMMENTS:
-    console.log("action.comments", action.comments)
       return action.comments;
 
-    case VOTE_COMMENT:
-      // map through each post and each comment and inc/dec vote score based on up vote
-      return state.map((comment) => {
-        if (comment.id === commentId ) {
-          upVote ? comment.voteScore++ : comment.voteScore--
-        }
-        return comment
-      })
-
     case CREATE_COMMENT:
-      return [...state, newComment]
+      return [...state, action.comment]
 
+    case VOTE_COMMENT:
     case REMOVE_COMMENT:
-//      return state.filter((comment) => comment.id !== commentId);
-      return state.map((comment) => {
-        if (comment.id === commentId) {
-          return { ...comment, deleted: true}
-        }
-        return comment;
-      })
-
     case MODIFY_COMMENT:
       // map through each post and replace modified post
       return state.map((comment) => {
-        if (comment.id === modifiedComment.id) {
-          return modifiedComment
-        }
-        return comment
+        return comment.id === action.comment.id
+        ? action.comment
+        : comment
       })
 
     default:
@@ -145,8 +95,8 @@ function comments (state = [], action) {
 function post (state = {}, action) {
   switch (action.type) {
     case GET_POST:
+    case MODIFY_POST:
       return action.post
-      break;
 
     default:
       return state

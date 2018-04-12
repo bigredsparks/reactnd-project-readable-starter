@@ -8,7 +8,7 @@ class PostEdit extends Component {
     postToEdit: undefined,
   }
 
-  handleAuthorChange = (event) => {
+  onAuthorChange = (event) => {
     const author = event.target.value
     const { postToEdit } = this.state
     this.setState({
@@ -19,7 +19,7 @@ class PostEdit extends Component {
     })
   }
 
-  handleTitleChange = (event) => {
+  onTitleChange = (event) => {
     const title = event.target.value
     const { postToEdit } = this.state
     this.setState({
@@ -30,7 +30,7 @@ class PostEdit extends Component {
     })
   }
 
-  handleBodyChange = (event) => {
+  onBodyChange = (event) => {
     const body = event.target.value
     const { postToEdit } = this.state
     this.setState({
@@ -42,7 +42,7 @@ class PostEdit extends Component {
   }
 
 
-  closeModal = (confirmed) => {
+  onCloseModal = (confirmed) => {
     const { closeModal } = this.props
     const { postToEdit } = this.state
 
@@ -52,10 +52,6 @@ class PostEdit extends Component {
       ? postToEdit
       : undefined
     )
-
-    // this.setState({
-    //   postToEdit: undefined,
-    // })
   }
 
   componentDidMount() {
@@ -86,7 +82,7 @@ class PostEdit extends Component {
               <Input
                 label='Author'
                 defaultValue={post.author}
-                onChange={this.handleAuthorChange}
+                onChange={this.onAuthorChange}
               />
             </Col>
           </Row>
@@ -95,7 +91,7 @@ class PostEdit extends Component {
               <Input
                 label='Title'
                 defaultValue={post.title}
-                onChange={this.handleTitleChange}
+                onChange={this.onTitleChange}
               />
             </Col>
           </Row>
@@ -104,15 +100,15 @@ class PostEdit extends Component {
               <Input
                 type='textarea'
                 defaultValue={post.body}
-                onChange={this.handleBodyChange}
+                onChange={this.onBodyChange}
               />
             </Col>
           </Row>
         </Container>
       </div>
       <div className='modal-footer'>
-        <Button color="success" onClick={() => this.closeModal(true)}>OK</Button>
-        <Button color="danger" onClick={() => this.closeModal(false)}>Cancel</Button>
+        <Button color="success" onClick={() => this.onCloseModal(true)}>OK</Button>
+        <Button color="danger" onClick={() => this.onCloseModal(false)}>Cancel</Button>
       </div>
     </Modal>
   )}

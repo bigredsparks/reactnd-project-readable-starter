@@ -7,14 +7,14 @@ class DeleteModal extends Component {
     isOpen: false // keeps track of visible state of modal
   }
 
-  openModal = () => {
+  onOpenModal = () => {
     // show modal
     this.setState({
       isOpen: true
     })
   }
 
-  closeModal = (confirm) => {
+  onCloseModal = (confirm) => {
     // call close callback on parent
     const { onClose, id } = this.props
     onClose && onClose(confirm, id)
@@ -30,17 +30,17 @@ class DeleteModal extends Component {
 
     return (
       <div  >
-        <Button color="danger" size={'sm'} onClick={this.openModal}>Delete</Button>
+        <Button color="danger" size={'sm'} onClick={this.onOpenModal}>Delete</Button>
         <Modal
           isOpen={isOpen}
-          onRequestClose={() => this.closeModal(false)}
+          onRequestClose={() => this.onCloseModal(false)}
           ariaHideApp={false}
           contentLabel="Delete Modal" >
           <div className='modal-header'>Confirm Delete</div>
           <div className='modal-body'>Are you sure?</div>
           <div className='modal-footer'>
-            <Button color="success" onClick={() => this.closeModal(true)}>Yes</Button>
-            <Button color="danger" onClick={() => this.closeModal(false)}>No</Button>
+            <Button color="success" onClick={() => this.onCloseModal(true)}>Yes</Button>
+            <Button color="danger" onClick={() => this.onCloseModal(false)}>No</Button>
           </div>
         </Modal>
       </div>

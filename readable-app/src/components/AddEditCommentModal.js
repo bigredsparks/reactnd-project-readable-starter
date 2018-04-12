@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import Modal from 'react-modal'
 import { Container, Col, Row, Button, Input } from 'mdbreact'
-import { capitalize } from '../utils/stringUtils'
 import { connect } from 'react-redux'
-import { createComment, modifyComment } from '../actions'
+import * as actions from '../actions'
+import * as PostsApi from './PostsApi'
 
 class AddEditCommentModal extends Component {
   state = {
@@ -12,7 +12,7 @@ class AddEditCommentModal extends Component {
     isOpen: false // keeps track of visible state of modal
   }
 
-  openModal = () => {
+  onOpenModal = () => {
     const { createComment, postId } = this.props
     let { comment } = this.props
 
@@ -21,7 +21,6 @@ class AddEditCommentModal extends Component {
         id: Date.now(),
         timestamp: Date.now(),
         author : '',
-        title: '',
         body: '',
         category: '',
         voteScore: 1,
@@ -38,15 +37,23 @@ class AddEditCommentModal extends Component {
     })
   }
 
-  closeModal = (confirmed) => {
+  onCloseModal = (confirmed) => {
     const { addComment, updateComment } = this.props
     const { createComment, commentToEdit } = this.state
 
     if (confirmed) {
       if (createComment) {
-        addComment({newComment: commentToEdit})
+        // create new comment
+        PostsApi.insertComment(commentToEdit).then((comment) =>{
+          addComment(comment)
+        })
+
       } else {
-        updateComment({modifiedComment: commentToEdit})
+        // update comment
+        commentToEdit.timestamp = Date.now()
+        PostsApi.updateComment(commentToEdit).then((comment) =>{
+          updateComment(comment)
+        })
       }
     }
 
@@ -56,7 +63,7 @@ class AddEditCommentModal extends Component {
     })
   }
 
-  handleAuthorChange = (event) => {
+  onAuthorChange = (event) => {
     const author = event.target.value
     const { commentToEdit } = this.state
     this.setState({
@@ -67,18 +74,7 @@ class AddEditCommentModal extends Component {
     })
   }
 
-  handleTitleChange = (event) => {
-    const title = event.target.value
-    const { commentToEdit } = this.state
-    this.setState({
-      commentToEdit: {
-        ...commentToEdit,
-        title
-      }
-    })
-  }
-
-  handleBodyChange = (event) => {
+  onBodyChange = (event) => {
     const body = event.target.value
     const { commentToEdit } = this.state
     this.setState({
@@ -95,38 +91,26 @@ class AddEditCommentModal extends Component {
 
     return (
       <div>
-        <Button color={createComment ? 'success' : 'warning'} size={'sm'} onClick={this.openModal}>{createComment ? 'Add Comment' : 'Edit'}</Button>
+        <Button color={createComment ? 'success' : 'warning'} size={'sm'} onClick={this.onOpenModal}>{createComment ? 'Add Comment' : 'Edit'}</Button>
         <Modal
         isOpen={isOpen}
-        onRequestClose={() => this.closeModal(false)}
+        onRequestClose={() => this.onCloseModal(false)}
         ariaHideApp={false}
         contentLabel="Edit Modal" >
         <div className='modal-header'>{createComment ? 'Create Comment' : 'Edit Comment'}</div>
         <div className='modal-body'>
           <Container fluid={true}>
-            {/* <Row>
-              <Col md='1' >Category</Col>
-              <Col md='11'>{createComment
-              ? <div>TODO</div>
-              : postToEdit && capitalize(postToEdit.category)}</Col>
-            </Row> */}
             <Row>
-              <Col md='12'>
+              {createComment
+              ?<Col md='12'>
                 <Input
-                  label='Author'
-                  defaultValue={commentToEdit && commentToEdit.author}
-                  onChange={this.handleAuthorChange}
-                />
+                    label='Author'
+                    defaultValue={commentToEdit && commentToEdit.author}
+                    onChange={this.onAuthorChange}
+                  />
               </Col>
-            </Row>
-            <Row>
-              <Col md='12'>
-                <Input
-                  label='Title'
-                  defaultValue={commentToEdit && commentToEdit.title}
-                  onChange={this.handleTitleChange}
-                />
-              </Col>
+              :<Col md='12' >Author: {commentToEdit && commentToEdit.author}</Col>}
+
             </Row>
             <Row>
               <Col md='12'>
@@ -134,15 +118,15 @@ class AddEditCommentModal extends Component {
                   label='Body'
                   type='textarea'
                   defaultValue={commentToEdit && commentToEdit.body}
-                  onChange={this.handleBodyChange}
+                  onChange={this.onBodyChange}
                 />
               </Col>
             </Row>
           </Container>
         </div>
         <div className='modal-footer'>
-          <Button color="success" onClick={() => this.closeModal(true)}>OK</Button>
-          <Button color="danger" onClick={() => this.closeModal(false)}>Cancel</Button>
+          <Button color="success" onClick={() => this.onCloseModal(true)}>OK</Button>
+          <Button color="danger" onClick={() => this.onCloseModal(false)}>Cancel</Button>
         </div>
       </Modal>
     </div>
@@ -151,8 +135,8 @@ class AddEditCommentModal extends Component {
 
 function mapDispatchToProps(dispatch) {
   return {
-    addComment: (data) => dispatch(createComment(data)),
-    updateComment: (data) => dispatch(modifyComment(data)),
+    addComment: (data) => dispatch(actions.createComment(data)),
+    updateComment: (data) => dispatch(actions.modifyComment(data)),
   }
 }
 

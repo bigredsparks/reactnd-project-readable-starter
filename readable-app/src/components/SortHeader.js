@@ -17,7 +17,6 @@ import Unsorted from 'react-icons/lib/ti/arrow-unsorted'
             : <Unsorted size={30} />
           }
           </div>
-
       );
     }
   }

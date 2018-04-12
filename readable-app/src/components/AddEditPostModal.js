@@ -3,7 +3,6 @@ import Modal from 'react-modal'
 import { Container, Col, Row, Button, Input } from 'mdbreact'
 import { capitalize } from '../utils/stringUtils'
 import { connect } from 'react-redux'
-//import { createPost, modifyPost } from '../actions'
 import * as actions from '../actions'
 import * as PostsApi from './PostsApi'
 
@@ -14,7 +13,7 @@ class AddEditPostModal extends Component {
     isOpen: false // keeps track of visible state of modal
   }
 
-  openModal = () => {
+  onOpenModal = () => {
     const { createPost } = this.props
     let { post } = this.props
 
@@ -40,13 +39,12 @@ class AddEditPostModal extends Component {
     })
   }
 
-  closeModal = (confirmed) => {
+  onCloseModal = (confirmed) => {
     const { addPost, updatePost } = this.props
     const { createPost, postToEdit } = this.state
 
     if (confirmed) {
       if (createPost) {
-//        addPost({newPost: postToEdit})
         PostsApi.insertPost(postToEdit).then((post) =>{
           addPost(post)
         })
@@ -64,7 +62,7 @@ class AddEditPostModal extends Component {
     })
   }
 
-  handleAuthorChange = (event) => {
+  onAuthorChange = (event) => {
     const author = event.target.value
     const { postToEdit } = this.state
     this.setState({
@@ -75,7 +73,7 @@ class AddEditPostModal extends Component {
     })
   }
 
-  handleTitleChange = (event) => {
+  onTitleChange = (event) => {
     const title = event.target.value
     const { postToEdit } = this.state
     this.setState({
@@ -86,7 +84,7 @@ class AddEditPostModal extends Component {
     })
   }
 
-  handleBodyChange = (event) => {
+  onBodyChange = (event) => {
     const body = event.target.value
     const { postToEdit } = this.state
     this.setState({
@@ -97,7 +95,7 @@ class AddEditPostModal extends Component {
     })
   }
 
-  handleCategoryChange = (event) => {
+  onCategoryChange = (event) => {
     const category = event.target.value
     const { postToEdit } = this.state
     this.setState({
@@ -114,46 +112,49 @@ class AddEditPostModal extends Component {
 
     return (
       <div>
-        <Button color="warning" size={'sm'} onClick={this.openModal}>{createPost ? 'Create Post' : 'Edit'}</Button>
+        <Button color="warning" size={'sm'} onClick={this.onOpenModal}>{createPost ? 'Create Post' : 'Edit'}</Button>
         <Modal
         isOpen={isOpen}
-        onRequestClose={() => this.closeModal(false)}
+        onRequestClose={() => this.onCloseModal(false)}
         ariaHideApp={false}
         contentLabel="Edit Modal" >
         <div className='modal-header'>{createPost ? 'Create Post' : 'Edit Post'}</div>
         <div className='modal-body'>
           <Container fluid={true}>
             <Row>
-              <Col md='1' >Category</Col>
+              <Col md='1' >Category:</Col>
               <Col md='11'>{createPost
-              ? <div>
-              <select
-                  onChange={this.handleCategoryChange}
-                  value={postToEdit ? postToEdit.category : ''}
-                  >
-                  <option value='' disabled>Select Category...</option>
-                  <option value='react'>React</option>
-                  <option value='redux'>Redux</option>
-                  <option value='udacity'>Udacity</option>
-                </select>
-              </div>
-              : postToEdit && capitalize(postToEdit.category)}</Col>
+                ? <div>
+                <select
+                    onChange={this.onCategoryChange}
+                    value={postToEdit ? postToEdit.category : ''}
+                    >
+                    <option value='' disabled>Select Category...</option>
+                    <option value='react'>React</option>
+                    <option value='redux'>Redux</option>
+                    <option value='udacity'>Udacity</option>
+                  </select>
+                </div>
+                : postToEdit && capitalize(postToEdit.category)}
+              </Col>
             </Row>
             <Row>
-              <Col md='12'>
+            {createPost
+              ?<Col md='12'>
                 <Input
-                  label='Author'
-                  defaultValue={postToEdit && postToEdit.author}
-                  onChange={this.handleAuthorChange}
-                />
+                    label='Author'
+                    defaultValue={postToEdit && postToEdit.author}
+                    onChange={this.onAuthorChange}
+                  />
               </Col>
+              :<Col md='12' >Author: {postToEdit && postToEdit.author}</Col>}
             </Row>
             <Row>
               <Col md='12'>
                 <Input
                   label='Title'
                   defaultValue={postToEdit && postToEdit.title}
-                  onChange={this.handleTitleChange}
+                  onChange={this.onTitleChange}
                 />
               </Col>
             </Row>
@@ -163,15 +164,15 @@ class AddEditPostModal extends Component {
                   label='Body'
                   type='textarea'
                   defaultValue={postToEdit && postToEdit.body}
-                  onChange={this.handleBodyChange}
+                  onChange={this.onBodyChange}
                 />
               </Col>
             </Row>
           </Container>
         </div>
         <div className='modal-footer'>
-          <Button color="success" onClick={() => this.closeModal(true)}>OK</Button>
-          <Button color="danger" onClick={() => this.closeModal(false)}>Cancel</Button>
+          <Button color="success" onClick={() => this.onCloseModal(true)}>OK</Button>
+          <Button color="danger" onClick={() => this.onCloseModal(false)}>Cancel</Button>
         </div>
       </Modal>
     </div>

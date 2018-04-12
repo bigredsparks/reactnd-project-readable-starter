@@ -35,11 +35,10 @@ export function getPost(post) {
 //   }
 // }
 
-export function votePost({postId, upVote}) {
+export function votePost(post) {
   return {
     type: VOTE_POST,
-    postId,
-    upVote
+    post,
   }
 }
 
@@ -78,33 +77,31 @@ export function getComments(comments) {
 //   }
 // }
 
-export function voteComment({commentId, upVote}) {
+export function voteComment(comment) {
   return {
     type: VOTE_COMMENT,
-    commentId,
-    upVote
+    comment,
   }
 }
 
-export function createComment({newComment}) {
+export function createComment(comment) {
   return {
     type: CREATE_COMMENT,
-    newComment,
+    comment,
   }
 }
 
-export function removeComment({commentId}) {
+export function removeComment(comment) {
   return {
     type: REMOVE_COMMENT,
-    commentId,
+    comment,
   }
 }
 
-
-export function modifyComment({modifiedComment}) {
+export function modifyComment(comment) {
   return {
     type: MODIFY_COMMENT,
-    modifiedComment
+    comment
   }
 }
 
