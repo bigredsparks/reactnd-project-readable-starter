@@ -40,6 +40,14 @@ li {
   text-align: center;
 }
 
+.voter {
+  cursor: pointer;
+}
+
+.label {
+  font-weight: bold;
+}
+
 .categorySelector {
   padding: 10px 10px 10px 20px;
 }
