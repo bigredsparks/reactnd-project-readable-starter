@@ -21,9 +21,11 @@ class ListPosts extends Component {
   }
 
   componentDidUpdate(prevProps) {
-     if(prevProps.category !== this.props.category) {
-       this.fetchPosts()
-     }
+    const {category} = this.state
+
+    if(prevProps.category !== this.props.category) {
+      this.fetchPosts()
+    }
   }
 
   fetchPosts = () => {
@@ -63,16 +65,16 @@ class ListPosts extends Component {
   }
 
   onCategoryChange = (event) => {
-    const { history } = this.props
+    //const { history } = this.props
     const category = event.target.value
     this.setState({
-      category
+       category
     })
-    history.push('/' + category)
+    this.props.history.push('/' + category)
   }
 
   render() {
-    const { posts, category } = this.props
+    const { posts, category, categories } = this.props
     const { sortKey } = this.state
 
     // show only posts that are not deleted
@@ -87,28 +89,31 @@ class ListPosts extends Component {
           </Navbar>
         </Container>
         <Container fluid={true} >
-          <div>
-            Categories: <select
+          <Row>
+            <div className="categorySelector" >
+              Categories: <select
                 onChange={this.onCategoryChange}
                 value={category || ''}
                 >
                 <option value=''>All</option>
-                <option value='react'>React</option>
-                <option value='redux'>Redux</option>
-                <option value='udacity'>Udacity</option>
-            </select>
-
-            {' '}Sort by: <select
-                  onChange={this.onSortBy}
-                  value={sortKey || '+timestamp'}
-                >
-                <option value='timestamp'>Oldest</option>
-                <option value='-timestamp'>Newest</option>
-                <option value='-voteScore'>Highest Vote</option>
-                <option value='voteScore'>Lowest Vote</option>
-            </select>
+                {categories.map((category) => (
+                  <option value={category.path}>{category.name}</option>
+                ))}
+                </select>
+            </div>
+            <div className="sortSelector" >
+              Sort by: <select
+                    onChange={this.onSortBy}
+                    value={sortKey || '+timestamp'}
+                  >
+                  <option value='timestamp'>Oldest</option>
+                  <option value='-timestamp'>Newest</option>
+                  <option value='-voteScore'>Highest Vote</option>
+                  <option value='voteScore'>Lowest Vote</option>
+              </select>
+            </div>
             <AddEditPostModal createPost={true} />
-          </div>
+          </Row>
           {shownPosts && shownPosts.map((post) => (
             <Card key={post.id} >
               <CardBody>
@@ -141,19 +146,18 @@ class ListPosts extends Component {
                 </Row>
                 </Container>
               </CardBody>
-
             </Card>
           ))}
-
         </Container>
       </div>
     )
   }
 }
 
-function mapStateToProps({posts}) {
+function mapStateToProps({posts, categories}) {
   return {
-    posts
+    posts,
+    categories
   }
 }
 

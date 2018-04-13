@@ -1,9 +1,5 @@
 import { combineReducers } from 'redux'
-import {
-  GET_POSTS, VOTE_POST, CREATE_POST, REMOVE_POST, MODIFY_POST,
-  GET_COMMENTS, VOTE_COMMENT, CREATE_COMMENT, REMOVE_COMMENT, MODIFY_COMMENT,
-  GET_POST
-} from '../actions'
+import * as ACTIONS from '../actions/types'
 
 // let initialPostState = [
 //   {
@@ -44,15 +40,15 @@ import {
 
 function posts (state = [], action) {
   switch (action.type) {
-    case GET_POSTS:
+    case ACTIONS.GET_POSTS:
       return action.posts
 
-    case CREATE_POST:
+    case ACTIONS.CREATE_POST:
       return [...state, action.post]
 
-    case VOTE_POST:
-    case REMOVE_POST:
-    case MODIFY_POST:
+    case ACTIONS.VOTE_POST:
+    case ACTIONS.REMOVE_POST:
+    case ACTIONS.MODIFY_POST:
     // map through each post and inc/dec vote score based on up vote
       return state.map((post) => {
         return post.id === action.post.id
@@ -71,15 +67,15 @@ function comments (state = [], action) {
     //    console.log("api comments", initComments)
     //    const newstate = [...state, ...initComments]
     //    return newstate
-    case GET_COMMENTS:
+    case ACTIONS.GET_COMMENTS:
       return action.comments;
 
-    case CREATE_COMMENT:
+    case ACTIONS.CREATE_COMMENT:
       return [...state, action.comment]
 
-    case VOTE_COMMENT:
-    case REMOVE_COMMENT:
-    case MODIFY_COMMENT:
+    case ACTIONS.VOTE_COMMENT:
+    case ACTIONS.REMOVE_COMMENT:
+    case ACTIONS.MODIFY_COMMENT:
       // map through each post and replace modified post
       return state.map((comment) => {
         return comment.id === action.comment.id
@@ -94,9 +90,19 @@ function comments (state = [], action) {
 
 function post (state = {}, action) {
   switch (action.type) {
-    case GET_POST:
-    case MODIFY_POST:
+    case ACTIONS.GET_POST:
+    case ACTIONS.MODIFY_POST:
       return action.post
+
+    default:
+      return state
+  }
+}
+
+function categories(state = [], action) {
+  switch (action.type) {
+    case ACTIONS.GET_CATEGORIES:
+      return action.categories.categories
 
     default:
       return state
@@ -107,6 +113,7 @@ function post (state = {}, action) {
    posts,
    comments,
    post,
+   categories
  })
 
 //export default post

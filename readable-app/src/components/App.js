@@ -1,21 +1,32 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import { Route } from 'react-router-dom'
 import ListPosts from './ListPosts'
 import PostDetail from './PostDetail'
+import * as actions from '../actions'
+import * as PostsApi from './PostsApi'
 
 class App extends Component {
-  state = {
-    categories: [
-      'react',
-      'redux',
-      'udacity'
-    ],
+  // state = {
+  //   categories: [
+  //     'react',
+  //     'redux',
+  //     'udacity'
+  //   ],
+  // }
+  componentDidMount() {
+    PostsApi.getCategories().then((categories) => {
+      this.props.getCategories(categories)
+    })
   }
 
   render() {
-    const { categories } = this.state
-
-    const categoryPath = `/:category(${categories.join('|')})`
+    const { categories } = this.props
+    if (categories.length === 0) {
+      return (<div></div>)
+    }
+    const paths = categories.map((category) => (category.path))
+    const categoryPath = `/:category(${paths.join('|')})`
     const detailPath = categoryPath + '/:post_id'
 
     return (
@@ -44,4 +55,16 @@ class App extends Component {
   }
 }
 
-export default App
+function mapStateToProps({categories}) {
+  return {
+    categories
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getCategories:(data) => dispatch(actions.getCategories(data)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App)
