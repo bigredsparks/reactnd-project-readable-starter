@@ -47,3 +47,7 @@ li {
 .sortSelector {
   padding: 10px;
 }
+
+.errorMsg {
+  color: red;
+}

@@ -10,7 +10,8 @@ class AddEditPostModal extends Component {
   state = {
     creatPost: false,
     postToEdit: undefined,
-    isOpen: false // keeps track of visible state of modal
+    isOpen: false, // keeps track of visible state of modal
+    errorMsg: ''
   }
 
   onOpenModal = () => {
@@ -44,6 +45,10 @@ class AddEditPostModal extends Component {
     const { createPost, postToEdit } = this.state
 
     if (confirmed) {
+      if (!this.validInput(postToEdit)) {
+        return
+      }
+
       if (createPost) {
         PostsApi.insertPost(postToEdit).then((post) =>{
           addPost(post)
@@ -60,6 +65,28 @@ class AddEditPostModal extends Component {
     this.setState({
       isOpen: false
     })
+  }
+
+  validInput = (post) => {
+    let errorMsg = ''
+    if (post.category.trim() === '') {
+      errorMsg = 'Please select a Category.'
+    }
+    else if (post.author.trim() === '') {
+      errorMsg = 'Please enter an Author.'
+    }
+    else if (post.title.trim() === '') {
+      errorMsg = 'Please enter a Title.'
+    }
+    else if (post.body.trim() === '') {
+      errorMsg = 'Please enter a Message.'
+    }
+
+    this.setState({
+      errorMsg
+    })
+
+    return errorMsg === ''
   }
 
   onAuthorChange = (event) => {
@@ -107,8 +134,8 @@ class AddEditPostModal extends Component {
   }
 
   render() {
-    const { createPost } = this.props
-    const { isOpen, postToEdit } = this.state
+    const { createPost, categories } = this.props
+    const { isOpen, postToEdit, errorMsg } = this.state
 
     return (
       <div>
@@ -130,9 +157,9 @@ class AddEditPostModal extends Component {
                     value={postToEdit ? postToEdit.category : ''}
                     >
                     <option value='' disabled>Select Category...</option>
-                    <option value='react'>React</option>
-                    <option value='redux'>Redux</option>
-                    <option value='udacity'>Udacity</option>
+                    {categories.map((category) =>(
+                      <option value={category.path}>{category.name}</option>
+                    ))}
                   </select>
                 </div>
                 : postToEdit && capitalize(postToEdit.category)}
@@ -161,12 +188,15 @@ class AddEditPostModal extends Component {
             <Row>
               <Col md='12'>
                 <Input
-                  label='Body'
+                  label='Message'
                   type='textarea'
                   defaultValue={postToEdit && postToEdit.body}
                   onChange={this.onBodyChange}
                 />
               </Col>
+            </Row>
+            <Row>
+              <div className="errorMsg">{errorMsg}</div>
             </Row>
           </Container>
         </div>
@@ -179,6 +209,12 @@ class AddEditPostModal extends Component {
   )}
 }
 
+function mapStateToProps({categories}) {
+  return {
+    categories
+  }
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     addPost: (data) => dispatch(actions.createPost(data)),
@@ -186,4 +222,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(undefined, mapDispatchToProps)(AddEditPostModal)
+export default connect(mapStateToProps, mapDispatchToProps)(AddEditPostModal)

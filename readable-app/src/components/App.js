@@ -1,19 +1,12 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Route } from 'react-router-dom'
+import { Route, withRouter } from 'react-router-dom'
 import ListPosts from './ListPosts'
 import PostDetail from './PostDetail'
 import * as actions from '../actions'
 import * as PostsApi from './PostsApi'
 
 class App extends Component {
-  // state = {
-  //   categories: [
-  //     'react',
-  //     'redux',
-  //     'udacity'
-  //   ],
-  // }
   componentDidMount() {
     PostsApi.getCategories().then((categories) => {
       this.props.getCategories(categories)
@@ -67,4 +60,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App))

@@ -9,7 +9,8 @@ class AddEditCommentModal extends Component {
   state = {
     createComment: false,
     commentToEdit: undefined,
-    isOpen: false // keeps track of visible state of modal
+    isOpen: false, // keeps track of visible state of modal
+    errorMsg: ''
   }
 
   onOpenModal = () => {
@@ -42,6 +43,9 @@ class AddEditCommentModal extends Component {
     const { createComment, commentToEdit } = this.state
 
     if (confirmed) {
+      if (!this.validInput(commentToEdit)) {
+        return
+      }
       if (createComment) {
         // create new comment
         PostsApi.insertComment(commentToEdit).then((comment) =>{
@@ -62,6 +66,22 @@ class AddEditCommentModal extends Component {
       isOpen: false
     })
   }
+
+  validInput = (post) => {
+    let errorMsg = ''
+    if (post.author.trim() === '') {
+      errorMsg = 'Please enter an Author.'
+    }
+    else if (post.body.trim() === '') {
+      errorMsg = 'Please enter a Message.'
+    }
+    this.setState({
+      errorMsg
+    })
+
+    return errorMsg === ''
+  }
+
 
   onAuthorChange = (event) => {
     const author = event.target.value
@@ -87,7 +107,7 @@ class AddEditCommentModal extends Component {
 
   render() {
     const { createComment } = this.props
-    const { isOpen, commentToEdit } = this.state
+    const { isOpen, commentToEdit, errorMsg } = this.state
 
     return (
       <div>
@@ -115,12 +135,15 @@ class AddEditCommentModal extends Component {
             <Row>
               <Col md='12'>
                 <Input
-                  label='Body'
+                  label='Message'
                   type='textarea'
                   defaultValue={commentToEdit && commentToEdit.body}
                   onChange={this.onBodyChange}
                 />
               </Col>
+            </Row>
+            <Row>
+              <div className="errorMsg">{errorMsg}</div>
             </Row>
           </Container>
         </div>

@@ -13,7 +13,6 @@ import * as PostsApi from './PostsApi'
 class ListPosts extends Component {
   state = {
     sortKey: 'timestamp',
-    category: ''
   }
 
   componentDidMount() {
@@ -65,11 +64,7 @@ class ListPosts extends Component {
   }
 
   onCategoryChange = (event) => {
-    //const { history } = this.props
     const category = event.target.value
-    this.setState({
-       category
-    })
     this.props.history.push('/' + category)
   }
 
@@ -103,13 +98,13 @@ class ListPosts extends Component {
             </div>
             <div className="sortSelector" >
               Sort by: <select
-                    onChange={this.onSortBy}
-                    value={sortKey || '+timestamp'}
-                  >
-                  <option value='timestamp'>Oldest</option>
-                  <option value='-timestamp'>Newest</option>
-                  <option value='-voteScore'>Highest Vote</option>
-                  <option value='voteScore'>Lowest Vote</option>
+                  onChange={this.onSortBy}
+                  value={sortKey || '+timestamp'}
+                >
+                <option value='timestamp'>Oldest</option>
+                <option value='-timestamp'>Newest</option>
+                <option value='-voteScore'>Highest Vote</option>
+                <option value='voteScore'>Lowest Vote</option>
               </select>
             </div>
             <AddEditPostModal createPost={true} />
