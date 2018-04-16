@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { Container, Card, CardBody, CardText, CardTitle, Col, Row, Navbar, NavbarBrand, Badge } from 'mdbreact'
 import { connect } from 'react-redux'
 import DeleteModal from './DeleteModal'
@@ -11,10 +11,6 @@ import * as actions from '../actions'
 import * as PostsApi from './PostsApi'
 
 class PostDetail extends Component {
-  state = {
-    redirect: false,
-  }
-
   componentDidMount() {
     this.fetchPost()
   }
@@ -31,14 +27,12 @@ class PostDetail extends Component {
   }
 
   onCloseDeleteModal = (confirmed, id) => {
-    this.setState({
-      redirect: confirmed,
-    })
-
     if (confirmed) {
       PostsApi.deletePostById(id).then((post) => {
         this.props.deletePost(post)
       })
+
+      this.props.history.goBack()
     }
   }
 
@@ -58,16 +52,7 @@ class PostDetail extends Component {
 
   render() {
     const { post, comments } = this.props
-    const { redirect } = this.state
-// TODO
-//    const { from } = this.props.location.state || { from: { pathname: "/" } }
-    const from = { pathname: "/" }
-
-    if (redirect) {
-      return <Redirect to={from} />
-    }
-
-   const postComments = comments.filter((comment) => comment.parentId === post.id && !comment.deleted)
+    const postComments = comments.filter((comment) => comment.parentId === post.id && !comment.deleted)
 
     return (
       <div>
@@ -171,4 +156,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostDetail)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(PostDetail))

@@ -158,7 +158,7 @@ class AddEditPostModal extends Component {
                     >
                     <option value='' disabled>Select Category...</option>
                     {categories.map((category) =>(
-                      <option value={category.path}>{category.name}</option>
+                      <option key={category.path} value={category.path}>{category.name}</option>
                     ))}
                   </select>
                 </div>

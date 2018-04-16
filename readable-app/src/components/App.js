@@ -41,6 +41,7 @@ class App extends Component {
           <PostDetail
             category={match.params.category}
             postId={match.params.post_id}
+            history={history}
           />
         )}/>
       </div>

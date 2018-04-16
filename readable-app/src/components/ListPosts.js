@@ -20,8 +20,6 @@ class ListPosts extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const {category} = this.state
-
     if(prevProps.category !== this.props.category) {
       this.fetchPosts()
     }
@@ -92,7 +90,7 @@ class ListPosts extends Component {
                 >
                 <option value=''>All</option>
                 {categories.map((category) => (
-                  <option value={category.path}>{category.name}</option>
+                  <option key={category.path} value={category.path}>{category.name}</option>
                 ))}
                 </select>
             </div>
