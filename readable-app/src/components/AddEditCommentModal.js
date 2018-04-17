@@ -3,7 +3,7 @@ import Modal from 'react-modal'
 import { Container, Col, Row, Button, Input } from 'mdbreact'
 import { connect } from 'react-redux'
 import * as actions from '../actions'
-import * as PostsApi from './PostsApi'
+import * as PostsApi from '../PostsApi'
 
 class AddEditCommentModal extends Component {
   state = {

@@ -4,7 +4,7 @@ import { Container, Col, Row, Button, Input } from 'mdbreact'
 import { capitalize } from '../utils/stringUtils'
 import { connect } from 'react-redux'
 import * as actions from '../actions'
-import * as PostsApi from './PostsApi'
+import * as PostsApi from '../PostsApi'
 
 class AddEditPostModal extends Component {
   state = {

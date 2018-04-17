@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { Route, withRouter } from 'react-router-dom'
+import { Route, withRouter, Switch } from 'react-router-dom'
 import ListPosts from './ListPosts'
 import PostDetail from './PostDetail'
+import NotFound from './NotFound'
 import * as actions from '../actions'
-import * as PostsApi from './PostsApi'
+import * as PostsApi from '../PostsApi'
 
 class App extends Component {
   componentDidMount() {
@@ -24,6 +25,7 @@ class App extends Component {
 
     return (
       <div className="App">
+        <Switch>
         <Route exact path='/' render={({history}) =>(
           <ListPosts
             categories={categories}
@@ -44,6 +46,8 @@ class App extends Component {
             history={history}
           />
         )}/>
+        <Route path='*' component={NotFound} />
+        </Switch>
       </div>
     );
   }

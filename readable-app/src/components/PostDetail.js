@@ -8,7 +8,7 @@ import AddEditCommentModal from './AddEditCommentModal'
 import { timestampToStr } from '../utils/dateUtils'
 import { capitalize } from '../utils/stringUtils'
 import * as actions from '../actions'
-import * as PostsApi from './PostsApi'
+import * as PostsApi from '../PostsApi'
 
 class PostDetail extends Component {
   componentDidMount() {
@@ -54,15 +54,24 @@ class PostDetail extends Component {
     const { post, comments } = this.props
     const postComments = comments.filter((comment) => comment.parentId === post.id && !comment.deleted)
 
+    console.log("post", post)
+
     return (
       <div>
         <Container fluid={true} >
-        <Navbar color="indigo" dark expand="md" scrolling>
-          <NavbarBrand href="/">Readable</NavbarBrand>
-        </Navbar>
-      </Container>
-
-      <Container>
+          <Navbar color="indigo" dark expand="md" scrolling>
+            <NavbarBrand href="/">Readable</NavbarBrand>
+          </Navbar>
+        </Container>
+        {post.id === undefined
+        ?
+        <Container>
+        <Row>
+          <Col md='12' ><h2>Post Not Found</h2></Col>
+        </Row>
+        </Container>
+        :
+        <Container>
         <Row>
           <Col md='12' ><h2>Post Detail</h2></Col>
         </Row>
@@ -133,8 +142,9 @@ class PostDetail extends Component {
           </Container>
         </Row>
       </Container>
+      }
     </div>
-    );
+    )
   }
 }
 

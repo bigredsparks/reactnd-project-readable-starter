@@ -8,7 +8,7 @@ import AddEditPostModal from './AddEditPostModal'
 import DeleteModal from './DeleteModal'
 import sortBy from 'sort-by'
 import * as actions from '../actions'
-import * as PostsApi from './PostsApi'
+import * as PostsApi from '../PostsApi'
 
 class ListPosts extends Component {
   state = {
